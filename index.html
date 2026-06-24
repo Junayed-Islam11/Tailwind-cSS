@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tailwind CSS Cheatbook</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #181c27;
+    --surface2: #1f2437;
+    --border: #2a3050;
+    --cyan: #22d3ee;
+    --cyan-dim: #0e7490;
+    --violet: #a78bfa;
+    --green: #34d399;
+    --orange: #fb923c;
+    --red: #f87171;
+    --yellow: #fbbf24;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --code-bg: #0d1117;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* Layout */
+  .layout { display: flex; min-height: 100vh; }
+
+  /* Sidebar */
+  .sidebar {
+    width: 220px;
+    min-width: 220px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 24px 0;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .sidebar-logo {
+    padding: 0 20px 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+
+  .sidebar-logo span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--cyan);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .sidebar-logo p {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .sidebar nav a {
+    display: block;
+    padding: 6px 20px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    border-left: 2px solid transparent;
+    transition: all 0.15s;
+  }
+
+  .sidebar nav a:hover, .sidebar nav a.active {
+    color: var(--cyan);
+    border-left-color: var(--cyan);
+    background: rgba(34, 211, 238, 0.06);
+  }
+
+  .sidebar-section-label {
+    padding: 14px 20px 4px;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* Search */
+  .search-wrap {
+    padding: 0 12px 16px;
+  }
+
+  .search-wrap input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 7px 12px;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .search-wrap input:focus { border-color: var(--cyan); }
+  .search-wrap input::placeholder { color: var(--muted); }
+
+  /* Main */
+  .main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 40px 48px;
+    max-width: 900px;
+  }
+
+  /* Hero */
+  .hero {
+    margin-bottom: 48px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--cyan);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .hero h1 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #fff 30%, var(--cyan) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+
+  .hero p {
+    color: var(--muted);
+    max-width: 560px;
+    font-size: 15px;
+  }
+
+  /* Section */
+  .section {
+    margin-bottom: 52px;
+    scroll-margin-top: 24px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .section-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--cyan);
+    flex-shrink: 0;
+  }
+
+  .section h2 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .section-desc {
+    color: var(--muted);
+    margin-bottom: 20px;
+    font-size: 13px;
+    max-width: 600px;
+  }
+
+  /* Grid */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+  @media (max-width: 700px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .main { padding: 24px 20px; }
+    .sidebar { display: none; }
+  }
+
+  /* Card */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    transition: border-color 0.15s;
+  }
+
+  .card:hover { border-color: var(--cyan-dim); }
+
+  .card-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  /* Code */
+  code, .mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .code-block {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.7;
+    overflow-x: auto;
+    margin-bottom: 10px;
+    white-space: pre;
+  }
+
+  .tag { color: var(--orange); }
+  .attr { color: var(--violet); }
+  .val { color: var(--green); }
+  .cmt { color: #4a5568; font-style: italic; }
+  .kw { color: var(--cyan); }
+  .str { color: var(--yellow); }
+
+  /* Utility table */
+  .util-table { width: 100%; border-collapse: collapse; }
+
+  .util-table th {
+    text-align: left;
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 6px 12px;
+    border-bottom: 1px solid var(--border);
+    font-weight: 600;
+  }
+
+  .util-table td {
+    padding: 7px 12px;
+    border-bottom: 1px solid rgba(42,48,80,0.5);
+    font-size: 13px;
+    vertical-align: top;
+  }
+
+  .util-table tr:last-child td { border-bottom: none; }
+  .util-table tr:hover td { background: rgba(34,211,238,0.03); }
+
+  .cls {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--cyan);
+    font-size: 12px;
+    background: rgba(34,211,238,0.08);
+    padding: 1px 6px;
+    border-radius: 4px;
+    display: inline-block;
+  }
+
+  .css-val {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  /* Chips */
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .chip {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    color: var(--cyan);
+    background: rgba(34,211,238,0.06);
+    cursor: pointer;
+    transition: all 0.12s;
+    user-select: all;
+  }
+
+  .chip:hover { background: rgba(34,211,238,0.15); border-color: var(--cyan-dim); }
+  .chip.violet { color: var(--violet); background: rgba(167,139,250,0.07); border-color: rgba(167,139,250,0.25); }
+  .chip.green { color: var(--green); background: rgba(52,211,153,0.07); border-color: rgba(52,211,153,0.25); }
+  .chip.orange { color: var(--orange); background: rgba(251,146,60,0.07); border-color: rgba(251,146,60,0.25); }
+  .chip.red { color: var(--red); background: rgba(248,113,113,0.07); border-color: rgba(248,113,113,0.25); }
+  .chip.yellow { color: var(--yellow); background: rgba(251,191,36,0.07); border-color: rgba(251,191,36,0.25); }
+
+  /* Divider */
+  .divider { height: 1px; background: var(--border); margin: 32px 0; }
+
+  /* Scale visual */
+  .scale-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .scale-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); width: 48px; flex-shrink: 0; }
+  .scale-bar-wrap { flex: 1; background: var(--surface2); border-radius: 3px; height: 14px; overflow: hidden; }
+  .scale-bar { height: 100%; background: linear-gradient(90deg, var(--cyan-dim), var(--cyan)); border-radius: 3px; }
+  .scale-px { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); width: 60px; text-align: right; }
+
+  /* Color swatch */
+  .swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(56px, 1fr)); gap: 6px; }
+  .swatch { border-radius: 6px; height: 36px; border: 1px solid rgba(255,255,255,0.06); }
+  .swatch-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); text-align: center; margin-top: 3px; }
+
+  /* Breakpoint visual */
+  .bp-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(42,48,80,0.5);
+  }
+  .bp-row:last-child { border-bottom: none; }
+  .bp-name { font-family: 'JetBrains Mono', monospace; color: var(--cyan); width: 40px; font-size: 13px; font-weight: 700; }
+  .bp-px { font-family: 'JetBrains Mono', monospace; color: var(--yellow); font-size: 12px; width: 80px; }
+  .bp-bar-wrap { flex: 1; background: var(--surface2); border-radius: 3px; height: 8px; }
+  .bp-bar { height: 100%; border-radius: 3px; }
+
+  /* Tag */
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 1px 7px;
+    border-radius: 99px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    vertical-align: middle;
+    margin-left: 6px;
+  }
+  .badge-new { background: rgba(52,211,153,0.15); color: var(--green); border: 1px solid rgba(52,211,153,0.3); }
+  .badge-tip { background: rgba(251,191,36,0.12); color: var(--yellow); border: 1px solid rgba(251,191,36,0.25); }
+
+  /* Copied toast */
+  #toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--green);
+    color: #0d1117;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 8px 16px;
+    border-radius: 6px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all 0.2s;
+    pointer-events: none;
+    z-index: 1000;
+  }
+  #toast.show { opacity: 1; transform: translateY(0); }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div id="toast">Copied!</div>
+
+<div class="layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <span>TW Cheatbook</span>
+      <p>v3 / v4 reference</p>
+    </div>
+
+    <div class="search-wrap">
+      <input type="text" id="search" placeholder="Search classes…" oninput="filterClasses(this.value)">
+    </div>
+
+    <div class="sidebar-section-label">Core</div>
+    <nav>
+      <a href="#setup">Setup</a>
+      <a href="#spacing">Spacing Scale</a>
+      <a href="#breakpoints">Breakpoints</a>
+      <a href="#colors">Colors</a>
+    </nav>
+
+    <div class="sidebar-section-label">Layout</div>
+    <nav>
+      <a href="#display">Display</a>
+      <a href="#flexbox">Flexbox</a>
+      <a href="#grid">Grid</a>
+      <a href="#positioning">Positioning</a>
+      <a href="#sizing">Sizing</a>
+    </nav>
+
+    <div class="sidebar-section-label">Typography</div>
+    <nav>
+      <a href="#typography">Font & Text</a>
+    </nav>
+
+    <div class="sidebar-section-label">Visuals</div>
+    <nav>
+      <a href="#background">Background</a>
+      <a href="#borders">Borders</a>
+      <a href="#effects">Effects & Shadows</a>
+      <a href="#transforms">Transforms</a>
+      <a href="#transitions">Transitions & Animation</a>
+    </nav>
+
+    <div class="sidebar-section-label">Interaction</div>
+    <nav>
+      <a href="#states">States & Variants</a>
+      <a href="#darkmode">Dark Mode</a>
+      <a href="#arbitrary">Arbitrary Values</a>
+      <a href="#tips">Pro Tips</a>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+
+    <div class="hero">
+      <p class="hero-eyebrow">// quick reference</p>
+      <h1>Tailwind CSS<br>Cheatbook</h1>
+      <p>Every class you'll actually reach for — from spacing and flexbox to dark mode, arbitrary values, and pro patterns. Click any class to copy it.</p>
+    </div>
+
+    <!-- SETUP -->
+    <section class="section" id="setup">
+      <div class="section-header"><div class="section-dot"></div><h2>Setup</h2></div>
+      <p class="section-desc">Get Tailwind running in minutes. Vite is the fastest path for new projects.</p>
+
+      <div class="card" style="margin-bottom:10px">
+        <div class="card-label">Install via npm (v3)</div>
+        <div class="code-block"><span class="kw">npm</span> install -D tailwindcss postcss autoprefixer
+<span class="kw">npx</span> tailwindcss init -p</div>
+      </div>
+
+      <div class="card" style="margin-bottom:10px">
+        <div class="card-label">tailwind.config.js — content paths</div>
+        <div class="code-block"><span class="cmt">// tailwind.config.js</span>
+<span class="kw">module</span>.exports = {
+  content: [<span class="str">"./src/**/*.{html,js,jsx,ts,tsx,vue}"</span>],
+  theme: { extend: {} },
+  plugins: [],
+}</div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">globals.css — directives</div>
+        <div class="code-block"><span class="attr">@tailwind</span> base;
+<span class="attr">@tailwind</span> components;
+<span class="attr">@tailwind</span> utilities;</div>
+      </div>
+    </section>
+
+    <!-- SPACING SCALE -->
+    <section class="section" id="spacing">
+      <div class="section-header"><div class="section-dot"></div><h2>Spacing Scale</h2></div>
+      <p class="section-desc">Tailwind's default scale — 1 unit = 4px. Used for <code class="cls">p-</code>, <code class="cls">m-</code>, <code class="cls">gap-</code>, <code class="cls">w-</code>, <code class="cls">h-</code>, and more.</p>
+
+      <div class="card">
+        <div style="padding:4px 0">
+          <div class="scale-row"><span class="scale-label">0</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:0%"></div></div><span class="scale-px">0px</span></div>
+          <div class="scale-row"><span class="scale-label">0.5</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:1%"></div></div><span class="scale-px">2px</span></div>
+          <div class="scale-row"><span class="scale-label">1</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:1.5%"></div></div><span class="scale-px">4px</span></div>
+          <div class="scale-row"><span class="scale-label">2</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:3%"></div></div><span class="scale-px">8px</span></div>
+          <div class="scale-row"><span class="scale-label">3</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:4.5%"></div></div><span class="scale-px">12px</span></div>
+          <div class="scale-row"><span class="scale-label">4</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:6%"></div></div><span class="scale-px">16px</span></div>
+          <div class="scale-row"><span class="scale-label">5</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:7.5%"></div></div><span class="scale-px">20px</span></div>
+          <div class="scale-row"><span class="scale-label">6</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:9%"></div></div><span class="scale-px">24px</span></div>
+          <div class="scale-row"><span class="scale-label">8</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:12%"></div></div><span class="scale-px">32px</span></div>
+          <div class="scale-row"><span class="scale-label">10</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:15%"></div></div><span class="scale-px">40px</span></div>
+          <div class="scale-row"><span class="scale-label">12</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:18%"></div></div><span class="scale-px">48px</span></div>
+          <div class="scale-row"><span class="scale-label">16</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:24%"></div></div><span class="scale-px">64px</span></div>
+          <div class="scale-row"><span class="scale-label">20</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:30%"></div></div><span class="scale-px">80px</span></div>
+          <div class="scale-row"><span class="scale-label">24</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:36%"></div></div><span class="scale-px">96px</span></div>
+          <div class="scale-row"><span class="scale-label">32</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:48%"></div></div><span class="scale-px">128px</span></div>
+          <div class="scale-row"><span class="scale-label">48</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:72%"></div></div><span class="scale-px">192px</span></div>
+          <div class="scale-row"><span class="scale-label">64</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:96%"></div></div><span class="scale-px">256px</span></div>
+        </div>
+      </div>
+
+      <div style="margin-top:14px">
+        <p class="section-desc" style="margin-bottom:10px">Common spacing utilities:</p>
+        <div class="chips">
+          <span class="chip" onclick="copy('p-4')">p-4</span>
+          <span class="chip" onclick="copy('px-6')">px-6</span>
+          <span class="chip" onclick="copy('py-2')">py-2</span>
+          <span class="chip" onclick="copy('pt-8')">pt-8</span>
+          <span class="chip" onclick="copy('m-auto')">m-auto</span>
+          <span class="chip" onclick="copy('mx-auto')">mx-auto</span>
+          <span class="chip" onclick="copy('mt-4')">mt-4</span>
+          <span class="chip" onclick="copy('mb-8')">mb-8</span>
+          <span class="chip" onclick="copy('gap-4')">gap-4</span>
+          <span class="chip" onclick="copy('gap-x-6')">gap-x-6</span>
+          <span class="chip" onclick="copy('gap-y-3')">gap-y-3</span>
+          <span class="chip" onclick="copy('space-x-4')">space-x-4</span>
+          <span class="chip" onclick="copy('space-y-2')">space-y-2</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- BREAKPOINTS -->
+    <section class="section" id="breakpoints">
+      <div class="section-header"><div class="section-dot"></div><h2>Breakpoints</h2></div>
+      <p class="section-desc">Tailwind is mobile-first. Prefix any class with a breakpoint to apply it at that width and above.</p>
+
+      <div class="card" style="margin-bottom:14px">
+        <div class="bp-row"><span class="bp-name">sm</span><span class="bp-px">≥ 640px</span><div class="bp-bar-wrap"><div class="bp-bar" style="width:25%;background:var(--green)"></div></div></div>
+        <div class="bp-row"><span class="bp-name">md</span><span class="bp-px">≥ 768px</span><div class="bp-bar-wrap"><div class="bp-bar" style="width:35%;background:var(--cyan)"></div></div></div>
+        <div class="bp-row"><span class="bp-name">lg</span><span class="bp-px">≥ 1024px</span><div class="bp-bar-wrap"><div class="bp-bar" style="width:50%;background:var(--violet)"></div></div></div>
+        <div class="bp-row"><span class="bp-name">xl</span><span class="bp-px">≥ 1280px</span><div class="bp-bar-wrap"><div class="bp-bar" style="width:65%;background:var(--orange)"></div></div></div>
+        <div class="bp-row"><span class="bp-name">2xl</span><span class="bp-px">≥ 1536px</span><div class="bp-bar-wrap"><div class="bp-bar" style="width:80%;background:var(--red)"></div></div></div>
+      </div>
+
+      <div class="code-block"><span class="cmt">&lt;!-- stacks on mobile, 3 columns on lg+ --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"grid grid-cols-1 lg:grid-cols-3 gap-6"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/div&gt;</span>
+
+<span class="cmt">&lt;!-- hidden on mobile, visible on md+ --&gt;</span>
+<span class="tag">&lt;nav</span> <span class="attr">class=</span><span class="val">"hidden md:flex"</span><span class="tag">&gt;</span><span class="tag">&lt;/nav&gt;</span>
+
+<span class="cmt">&lt;!-- smaller text on mobile, larger on xl --&gt;</span>
+<span class="tag">&lt;h1</span> <span class="attr">class=</span><span class="val">"text-2xl xl:text-5xl"</span><span class="tag">&gt;</span><span class="tag">&lt;/h1&gt;</span></div>
+    </section>
+
+    <!-- COLORS -->
+    <section class="section" id="colors">
+      <div class="section-header"><div class="section-dot"></div><h2>Colors</h2></div>
+      <p class="section-desc">Pattern: <code class="cls">{property}-{color}-{shade}</code>. Shades run 50 → 950. Used for text, bg, border, ring, shadow, etc.</p>
+
+      <div class="chips" style="margin-bottom:16px">
+        <span class="chip" onclick="copy('text-slate-700')">text-slate-700</span>
+        <span class="chip" onclick="copy('bg-blue-500')">bg-blue-500</span>
+        <span class="chip" onclick="copy('border-red-300')">border-red-300</span>
+        <span class="chip" onclick="copy('ring-violet-500')">ring-violet-500</span>
+        <span class="chip" onclick="copy('bg-opacity-50')">bg-opacity-50</span>
+        <span class="chip" onclick="copy('text-white')">text-white</span>
+        <span class="chip" onclick="copy('bg-transparent')">bg-transparent</span>
+        <span class="chip" onclick="copy('text-current')">text-current</span>
+      </div>
+
+      <div class="card">
+        <div class="card-label">slate palette (same pattern for all colors)</div>
+        <div class="swatch-grid">
+          <div><div class="swatch" style="background:#f8fafc"></div><div class="swatch-label">50</div></div>
+          <div><div class="swatch" style="background:#f1f5f9"></div><div class="swatch-label">100</div></div>
+          <div><div class="swatch" style="background:#e2e8f0"></div><div class="swatch-label">200</div></div>
+          <div><div class="swatch" style="background:#cbd5e1"></div><div class="swatch-label">300</div></div>
+          <div><div class="swatch" style="background:#94a3b8"></div><div class="swatch-label">400</div></div>
+          <div><div class="swatch" style="background:#64748b"></div><div class="swatch-label">500</div></div>
+          <div><div class="swatch" style="background:#475569"></div><div class="swatch-label">600</div></div>
+          <div><div class="swatch" style="background:#334155"></div><div class="swatch-label">700</div></div>
+          <div><div class="swatch" style="background:#1e293b"></div><div class="swatch-label">800</div></div>
+          <div><div class="swatch" style="background:#0f172a"></div><div class="swatch-label">900</div></div>
+          <div><div class="swatch" style="background:#020617"></div><div class="swatch-label">950</div></div>
+        </div>
+        <p style="font-size:11px;color:var(--muted);margin-top:10px">Colors: <code class="mono" style="font-size:11px">slate · gray · zinc · neutral · stone · red · orange · amber · yellow · lime · green · emerald · teal · cyan · sky · blue · indigo · violet · purple · fuchsia · pink · rose</code></p>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- DISPLAY -->
+    <section class="section" id="display">
+      <div class="section-header"><div class="section-dot"></div><h2>Display</h2></div>
+
+      <div class="chips">
+        <span class="chip" onclick="copy('block')">block</span>
+        <span class="chip" onclick="copy('inline-block')">inline-block</span>
+        <span class="chip" onclick="copy('inline')">inline</span>
+        <span class="chip" onclick="copy('flex')">flex</span>
+        <span class="chip" onclick="copy('inline-flex')">inline-flex</span>
+        <span class="chip" onclick="copy('grid')">grid</span>
+        <span class="chip" onclick="copy('inline-grid')">inline-grid</span>
+        <span class="chip" onclick="copy('hidden')">hidden</span>
+        <span class="chip" onclick="copy('contents')">contents</span>
+        <span class="chip" onclick="copy('table')">table</span>
+      </div>
+    </section>
+
+    <!-- FLEXBOX -->
+    <section class="section" id="flexbox">
+      <div class="section-header"><div class="section-dot"></div><h2>Flexbox</h2></div>
+      <p class="section-desc">The most common layout system you'll use daily.</p>
+
+      <div class="grid-2" style="margin-bottom:14px">
+        <div class="card">
+          <div class="card-label">Direction</div>
+          <div class="chips"><span class="chip" onclick="copy('flex-row')">flex-row</span><span class="chip" onclick="copy('flex-col')">flex-col</span><span class="chip" onclick="copy('flex-row-reverse')">flex-row-reverse</span><span class="chip" onclick="copy('flex-col-reverse')">flex-col-reverse</span></div>
+        </div>
+        <div class="card">
+          <div class="card-label">Wrap</div>
+          <div class="chips"><span class="chip" onclick="copy('flex-wrap')">flex-wrap</span><span class="chip" onclick="copy('flex-nowrap')">flex-nowrap</span><span class="chip" onclick="copy('flex-wrap-reverse')">flex-wrap-reverse</span></div>
+        </div>
+        <div class="card">
+          <div class="card-label">Justify content (main axis)</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('justify-start')">justify-start</span>
+            <span class="chip" onclick="copy('justify-center')">justify-center</span>
+            <span class="chip" onclick="copy('justify-end')">justify-end</span>
+            <span class="chip" onclick="copy('justify-between')">justify-between</span>
+            <span class="chip" onclick="copy('justify-around')">justify-around</span>
+            <span class="chip" onclick="copy('justify-evenly')">justify-evenly</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Align items (cross axis)</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('items-start')">items-start</span>
+            <span class="chip" onclick="copy('items-center')">items-center</span>
+            <span class="chip" onclick="copy('items-end')">items-end</span>
+            <span class="chip" onclick="copy('items-stretch')">items-stretch</span>
+            <span class="chip" onclick="copy('items-baseline')">items-baseline</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Flex grow / shrink</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('flex-1')">flex-1</span>
+            <span class="chip" onclick="copy('flex-auto')">flex-auto</span>
+            <span class="chip" onclick="copy('flex-none')">flex-none</span>
+            <span class="chip" onclick="copy('grow')">grow</span>
+            <span class="chip" onclick="copy('shrink-0')">shrink-0</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Self align</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('self-auto')">self-auto</span>
+            <span class="chip" onclick="copy('self-start')">self-start</span>
+            <span class="chip" onclick="copy('self-center')">self-center</span>
+            <span class="chip" onclick="copy('self-end')">self-end</span>
+            <span class="chip" onclick="copy('self-stretch')">self-stretch</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Common pattern — centered card</div>
+        <div class="code-block"><span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"flex items-center justify-center min-h-screen"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"flex flex-col gap-4 p-8 rounded-xl bg-white"</span><span class="tag">&gt;</span>
+    <span class="cmt">&lt;!-- card content --&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span></div>
+      </div>
+    </section>
+
+    <!-- GRID -->
+    <section class="section" id="grid">
+      <div class="section-header"><div class="section-dot"></div><h2>Grid</h2></div>
+
+      <div class="grid-2" style="margin-bottom:14px">
+        <div class="card">
+          <div class="card-label">Columns</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('grid-cols-1')">grid-cols-1</span>
+            <span class="chip" onclick="copy('grid-cols-2')">grid-cols-2</span>
+            <span class="chip" onclick="copy('grid-cols-3')">grid-cols-3</span>
+            <span class="chip" onclick="copy('grid-cols-4')">grid-cols-4</span>
+            <span class="chip" onclick="copy('grid-cols-6')">grid-cols-6</span>
+            <span class="chip" onclick="copy('grid-cols-12')">grid-cols-12</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Column span</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('col-span-1')">col-span-1</span>
+            <span class="chip" onclick="copy('col-span-2')">col-span-2</span>
+            <span class="chip" onclick="copy('col-span-full')">col-span-full</span>
+            <span class="chip" onclick="copy('col-start-2')">col-start-2</span>
+            <span class="chip" onclick="copy('col-end-4')">col-end-4</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Rows</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('grid-rows-2')">grid-rows-2</span>
+            <span class="chip" onclick="copy('row-span-2')">row-span-2</span>
+            <span class="chip" onclick="copy('row-start-1')">row-start-1</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Auto flow</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('grid-flow-row')">grid-flow-row</span>
+            <span class="chip" onclick="copy('grid-flow-col')">grid-flow-col</span>
+            <span class="chip" onclick="copy('grid-flow-dense')">grid-flow-dense</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Responsive auto-fill grid pattern</div>
+        <div class="code-block"><span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"col-span-1"</span><span class="tag">&gt;</span>Card<span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span>
+
+<span class="cmt">&lt;!-- fluid grid with min-width using arbitrary value --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"grid [grid-template-columns:repeat(auto-fill,minmax(200px,1fr))] gap-4"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/div&gt;</span></div>
+      </div>
+    </section>
+
+    <!-- POSITIONING -->
+    <section class="section" id="positioning">
+      <div class="section-header"><div class="section-dot"></div><h2>Positioning</h2></div>
+
+      <div class="grid-2" style="margin-bottom:14px">
+        <div class="card">
+          <div class="card-label">Position</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('static')">static</span>
+            <span class="chip" onclick="copy('relative')">relative</span>
+            <span class="chip" onclick="copy('absolute')">absolute</span>
+            <span class="chip" onclick="copy('fixed')">fixed</span>
+            <span class="chip" onclick="copy('sticky')">sticky</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Inset / TRBL</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('inset-0')">inset-0</span>
+            <span class="chip" onclick="copy('inset-x-0')">inset-x-0</span>
+            <span class="chip" onclick="copy('top-0')">top-0</span>
+            <span class="chip" onclick="copy('right-0')">right-0</span>
+            <span class="chip" onclick="copy('bottom-0')">bottom-0</span>
+            <span class="chip" onclick="copy('left-0')">left-0</span>
+            <span class="chip" onclick="copy('top-1/2')">top-1/2</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Z-Index</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('z-0')">z-0</span>
+            <span class="chip" onclick="copy('z-10')">z-10</span>
+            <span class="chip" onclick="copy('z-20')">z-20</span>
+            <span class="chip" onclick="copy('z-30')">z-30</span>
+            <span class="chip" onclick="copy('z-40')">z-40</span>
+            <span class="chip" onclick="copy('z-50')">z-50</span>
+            <span class="chip" onclick="copy('z-auto')">z-auto</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Overflow</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('overflow-hidden')">overflow-hidden</span>
+            <span class="chip" onclick="copy('overflow-auto')">overflow-auto</span>
+            <span class="chip" onclick="copy('overflow-scroll')">overflow-scroll</span>
+            <span class="chip" onclick="copy('overflow-x-auto')">overflow-x-auto</span>
+            <span class="chip" onclick="copy('overflow-y-hidden')">overflow-y-hidden</span>
+            <span class="chip" onclick="copy('truncate')">truncate</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Classic centering pattern</div>
+        <div class="code-block"><span class="cmt">&lt;!-- absolute center inside a relative parent --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"relative h-64"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"</span><span class="tag">&gt;</span>
+    Centered
+  <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span></div>
+      </div>
+    </section>
+
+    <!-- SIZING -->
+    <section class="section" id="sizing">
+      <div class="section-header"><div class="section-dot"></div><h2>Sizing</h2></div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-label">Width</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('w-full')">w-full</span>
+            <span class="chip" onclick="copy('w-screen')">w-screen</span>
+            <span class="chip" onclick="copy('w-auto')">w-auto</span>
+            <span class="chip" onclick="copy('w-fit')">w-fit</span>
+            <span class="chip" onclick="copy('w-max')">w-max</span>
+            <span class="chip" onclick="copy('w-min')">w-min</span>
+            <span class="chip" onclick="copy('w-1/2')">w-1/2</span>
+            <span class="chip" onclick="copy('w-1/3')">w-1/3</span>
+            <span class="chip" onclick="copy('w-2/3')">w-2/3</span>
+            <span class="chip" onclick="copy('w-1/4')">w-1/4</span>
+            <span class="chip" onclick="copy('w-64')">w-64</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Height</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('h-full')">h-full</span>
+            <span class="chip" onclick="copy('h-screen')">h-screen</span>
+            <span class="chip" onclick="copy('h-svh')">h-svh</span>
+            <span class="chip" onclick="copy('h-dvh')">h-dvh</span>
+            <span class="chip" onclick="copy('h-auto')">h-auto</span>
+            <span class="chip" onclick="copy('h-fit')">h-fit</span>
+            <span class="chip" onclick="copy('min-h-screen')">min-h-screen</span>
+            <span class="chip" onclick="copy('max-h-96')">max-h-96</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Max / Min width</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('max-w-sm')">max-w-sm</span>
+            <span class="chip" onclick="copy('max-w-md')">max-w-md</span>
+            <span class="chip" onclick="copy('max-w-lg')">max-w-lg</span>
+            <span class="chip" onclick="copy('max-w-xl')">max-w-xl</span>
+            <span class="chip" onclick="copy('max-w-2xl')">max-w-2xl</span>
+            <span class="chip" onclick="copy('max-w-screen-lg')">max-w-screen-lg</span>
+            <span class="chip" onclick="copy('max-w-prose')">max-w-prose</span>
+            <span class="chip" onclick="copy('min-w-0')">min-w-0</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Aspect ratio</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('aspect-square')">aspect-square</span>
+            <span class="chip" onclick="copy('aspect-video')">aspect-video</span>
+            <span class="chip" onclick="copy('aspect-auto')">aspect-auto</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- TYPOGRAPHY -->
+    <section class="section" id="typography">
+      <div class="section-header"><div class="section-dot"></div><h2>Typography</h2></div>
+
+      <table class="util-table" style="margin-bottom:14px">
+        <thead><tr><th>Class</th><th>CSS</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td><span class="cls" onclick="copy('text-xs')" style="cursor:pointer">text-xs</span></td><td><span class="css-val">0.75rem / 1rem</span></td><td style="color:var(--muted);font-size:12px">12px</td></tr>
+          <tr><td><span class="cls" onclick="copy('text-sm')" style="cursor:pointer">text-sm</span></td><td><span class="css-val">0.875rem / 1.25rem</span></td><td style="color:var(--muted);font-size:12px">14px</td></tr>
+          <tr><td><span class="cls" onclick="copy('text-base')" style="cursor:pointer">text-base</span></td><td><span class="css-val">1rem / 1.5rem</span></td><td style="color:var(--muted);font-size:12px">16px</td></tr>
+          <tr><td><span class="cls" onclick="copy('text-lg')" style="cursor:pointer">text-lg</span></td><td><span class="css-val">1.125rem / 1.75rem</span></td><td style="color:var(--muted);font-size:12px">18px</td></tr>
+          <tr><td><span class="cls" onclick="copy('text-xl')" style="cursor:pointer">text-xl</span></td><td><span class="css-val">1.25rem / 1.75rem</span></td><td style="color:var(--muted);font-size:12px">20px</td></tr>
+          <tr><td><span class="cls" onclick="copy('text-2xl')" style="cursor:pointer">text-2xl</span></td><td><span class="css-val">1.5rem / 2rem</span></td><td style="color:var(--muted);font-size:12px">24px</td></tr>
+          <tr><td><span class="cls" onclick="copy('text-3xl')" style="cursor:pointer">text-3xl</span></td><td><span class="css-val">1.875rem / 2.25rem</span></td><td style="color:var(--muted);font-size:12px">30px</td></tr>
+          <tr><td><span class="cls" onclick="copy('text-4xl')" style="cursor:pointer">text-4xl</span></td><td><span class="css-val">2.25rem / 2.5rem</span></td><td style="color:var(--muted);font-size:12px">36px</td></tr>
+          <tr><td><span class="cls" onclick="copy('text-5xl')" style="cursor:pointer">text-5xl</span></td><td><span class="css-val">3rem / 1</span></td><td style="color:var(--muted);font-size:12px">48px</td></tr>
+          <tr><td><span class="cls" onclick="copy('text-6xl')" style="cursor:pointer">text-6xl</span></td><td><span class="css-val">3.75rem / 1</span></td><td style="color:var(--muted);font-size:12px">60px</td></tr>
+        </tbody>
+      </table>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-label">Font weight</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('font-thin')">font-thin</span>
+            <span class="chip" onclick="copy('font-light')">font-light</span>
+            <span class="chip" onclick="copy('font-normal')">font-normal</span>
+            <span class="chip" onclick="copy('font-medium')">font-medium</span>
+            <span class="chip" onclick="copy('font-semibold')">font-semibold</span>
+            <span class="chip" onclick="copy('font-bold')">font-bold</span>
+            <span class="chip" onclick="copy('font-extrabold')">font-extrabold</span>
+            <span class="chip" onclick="copy('font-black')">font-black</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Text alignment</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('text-left')">text-left</span>
+            <span class="chip" onclick="copy('text-center')">text-center</span>
+            <span class="chip" onclick="copy('text-right')">text-right</span>
+            <span class="chip" onclick="copy('text-justify')">text-justify</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Line height</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('leading-none')">leading-none</span>
+            <span class="chip" onclick="copy('leading-tight')">leading-tight</span>
+            <span class="chip" onclick="copy('leading-snug')">leading-snug</span>
+            <span class="chip" onclick="copy('leading-normal')">leading-normal</span>
+            <span class="chip" onclick="copy('leading-relaxed')">leading-relaxed</span>
+            <span class="chip" onclick="copy('leading-loose')">leading-loose</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Letter spacing</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('tracking-tighter')">tracking-tighter</span>
+            <span class="chip" onclick="copy('tracking-tight')">tracking-tight</span>
+            <span class="chip" onclick="copy('tracking-normal')">tracking-normal</span>
+            <span class="chip" onclick="copy('tracking-wide')">tracking-wide</span>
+            <span class="chip" onclick="copy('tracking-wider')">tracking-wider</span>
+            <span class="chip" onclick="copy('tracking-widest')">tracking-widest</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Text decoration / style</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('underline')">underline</span>
+            <span class="chip" onclick="copy('line-through')">line-through</span>
+            <span class="chip" onclick="copy('no-underline')">no-underline</span>
+            <span class="chip" onclick="copy('italic')">italic</span>
+            <span class="chip" onclick="copy('not-italic')">not-italic</span>
+            <span class="chip" onclick="copy('uppercase')">uppercase</span>
+            <span class="chip" onclick="copy('lowercase')">lowercase</span>
+            <span class="chip" onclick="copy('capitalize')">capitalize</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Text overflow</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('truncate')">truncate</span>
+            <span class="chip" onclick="copy('text-ellipsis')">text-ellipsis</span>
+            <span class="chip" onclick="copy('text-clip')">text-clip</span>
+            <span class="chip" onclick="copy('whitespace-nowrap')">whitespace-nowrap</span>
+            <span class="chip" onclick="copy('whitespace-pre')">whitespace-pre</span>
+            <span class="chip" onclick="copy('break-all')">break-all</span>
+            <span class="chip" onclick="copy('break-words')">break-words</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- BACKGROUND -->
+    <section class="section" id="background">
+      <div class="section-header"><div class="section-dot"></div><h2>Background</h2></div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-label">Gradient</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('bg-gradient-to-r')">bg-gradient-to-r</span>
+            <span class="chip" onclick="copy('bg-gradient-to-br')">bg-gradient-to-br</span>
+            <span class="chip" onclick="copy('from-blue-500')">from-blue-500</span>
+            <span class="chip" onclick="copy('via-purple-500')">via-purple-500</span>
+            <span class="chip" onclick="copy('to-pink-500')">to-pink-500</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Image / size / position</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('bg-cover')">bg-cover</span>
+            <span class="chip" onclick="copy('bg-contain')">bg-contain</span>
+            <span class="chip" onclick="copy('bg-center')">bg-center</span>
+            <span class="chip" onclick="copy('bg-top')">bg-top</span>
+            <span class="chip" onclick="copy('bg-no-repeat')">bg-no-repeat</span>
+            <span class="chip" onclick="copy('bg-fixed')">bg-fixed</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-block" style="margin-top:10px"><span class="cmt">&lt;!-- gradient button --&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">class=</span><span class="val">"bg-gradient-to-r from-cyan-500 to-blue-600 px-6 py-2 rounded-lg font-semibold text-white"</span><span class="tag">&gt;</span>
+  Click me
+<span class="tag">&lt;/button&gt;</span></div>
+    </section>
+
+    <!-- BORDERS -->
+    <section class="section" id="borders">
+      <div class="section-header"><div class="section-dot"></div><h2>Borders & Radius</h2></div>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-label">Width</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('border')">border</span>
+            <span class="chip" onclick="copy('border-0')">border-0</span>
+            <span class="chip" onclick="copy('border-2')">border-2</span>
+            <span class="chip" onclick="copy('border-4')">border-4</span>
+            <span class="chip" onclick="copy('border-t')">border-t</span>
+            <span class="chip" onclick="copy('border-b')">border-b</span>
+            <span class="chip" onclick="copy('border-x')">border-x</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Radius</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('rounded-none')">rounded-none</span>
+            <span class="chip" onclick="copy('rounded-sm')">rounded-sm</span>
+            <span class="chip" onclick="copy('rounded')">rounded</span>
+            <span class="chip" onclick="copy('rounded-md')">rounded-md</span>
+            <span class="chip" onclick="copy('rounded-lg')">rounded-lg</span>
+            <span class="chip" onclick="copy('rounded-xl')">rounded-xl</span>
+            <span class="chip" onclick="copy('rounded-2xl')">rounded-2xl</span>
+            <span class="chip" onclick="copy('rounded-full')">rounded-full</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Ring (focus)</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('ring-1')">ring-1</span>
+            <span class="chip" onclick="copy('ring-2')">ring-2</span>
+            <span class="chip" onclick="copy('ring-4')">ring-4</span>
+            <span class="chip" onclick="copy('ring-inset')">ring-inset</span>
+            <span class="chip" onclick="copy('ring-offset-2')">ring-offset-2</span>
+            <span class="chip" onclick="copy('ring-blue-500')">ring-blue-500</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EFFECTS -->
+    <section class="section" id="effects">
+      <div class="section-header"><div class="section-dot"></div><h2>Effects & Shadows</h2></div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-label">Box shadow</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('shadow-sm')">shadow-sm</span>
+            <span class="chip" onclick="copy('shadow')">shadow</span>
+            <span class="chip" onclick="copy('shadow-md')">shadow-md</span>
+            <span class="chip" onclick="copy('shadow-lg')">shadow-lg</span>
+            <span class="chip" onclick="copy('shadow-xl')">shadow-xl</span>
+            <span class="chip" onclick="copy('shadow-2xl')">shadow-2xl</span>
+            <span class="chip" onclick="copy('shadow-none')">shadow-none</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Opacity</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('opacity-0')">opacity-0</span>
+            <span class="chip" onclick="copy('opacity-25')">opacity-25</span>
+            <span class="chip" onclick="copy('opacity-50')">opacity-50</span>
+            <span class="chip" onclick="copy('opacity-75')">opacity-75</span>
+            <span class="chip" onclick="copy('opacity-100')">opacity-100</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Blur / filter</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('blur-sm')">blur-sm</span>
+            <span class="chip" onclick="copy('blur')">blur</span>
+            <span class="chip" onclick="copy('blur-lg')">blur-lg</span>
+            <span class="chip" onclick="copy('blur-xl')">blur-xl</span>
+            <span class="chip" onclick="copy('backdrop-blur-sm')">backdrop-blur-sm</span>
+            <span class="chip" onclick="copy('backdrop-blur-md')">backdrop-blur-md</span>
+            <span class="chip" onclick="copy('grayscale')">grayscale</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Cursor / pointer</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('cursor-pointer')">cursor-pointer</span>
+            <span class="chip" onclick="copy('cursor-not-allowed')">cursor-not-allowed</span>
+            <span class="chip" onclick="copy('cursor-default')">cursor-default</span>
+            <span class="chip" onclick="copy('cursor-grab')">cursor-grab</span>
+            <span class="chip" onclick="copy('pointer-events-none')">pointer-events-none</span>
+            <span class="chip" onclick="copy('select-none')">select-none</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TRANSFORMS -->
+    <section class="section" id="transforms">
+      <div class="section-header"><div class="section-dot"></div><h2>Transforms</h2></div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-label">Scale / rotate</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('scale-50')">scale-50</span>
+            <span class="chip" onclick="copy('scale-75')">scale-75</span>
+            <span class="chip" onclick="copy('scale-90')">scale-90</span>
+            <span class="chip" onclick="copy('scale-100')">scale-100</span>
+            <span class="chip" onclick="copy('scale-105')">scale-105</span>
+            <span class="chip" onclick="copy('scale-110')">scale-110</span>
+            <span class="chip" onclick="copy('rotate-45')">rotate-45</span>
+            <span class="chip" onclick="copy('rotate-90')">rotate-90</span>
+            <span class="chip" onclick="copy('rotate-180')">rotate-180</span>
+            <span class="chip" onclick="copy('-rotate-45')">-rotate-45</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Translate</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('translate-x-4')">translate-x-4</span>
+            <span class="chip" onclick="copy('-translate-x-1/2')">-translate-x-1/2</span>
+            <span class="chip" onclick="copy('translate-y-4')">translate-y-4</span>
+            <span class="chip" onclick="copy('-translate-y-1/2')">-translate-y-1/2</span>
+            <span class="chip" onclick="copy('translate-x-full')">translate-x-full</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TRANSITIONS -->
+    <section class="section" id="transitions">
+      <div class="section-header"><div class="section-dot"></div><h2>Transitions & Animation</h2></div>
+
+      <div class="grid-2" style="margin-bottom:14px">
+        <div class="card">
+          <div class="card-label">Transition</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('transition')">transition</span>
+            <span class="chip" onclick="copy('transition-all')">transition-all</span>
+            <span class="chip" onclick="copy('transition-colors')">transition-colors</span>
+            <span class="chip" onclick="copy('transition-opacity')">transition-opacity</span>
+            <span class="chip" onclick="copy('transition-transform')">transition-transform</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Duration / easing</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('duration-75')">duration-75</span>
+            <span class="chip" onclick="copy('duration-150')">duration-150</span>
+            <span class="chip" onclick="copy('duration-300')">duration-300</span>
+            <span class="chip" onclick="copy('duration-500')">duration-500</span>
+            <span class="chip" onclick="copy('ease-in')">ease-in</span>
+            <span class="chip" onclick="copy('ease-out')">ease-out</span>
+            <span class="chip" onclick="copy('ease-in-out')">ease-in-out</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Animations</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('animate-spin')">animate-spin</span>
+            <span class="chip" onclick="copy('animate-ping')">animate-ping</span>
+            <span class="chip" onclick="copy('animate-pulse')">animate-pulse</span>
+            <span class="chip" onclick="copy('animate-bounce')">animate-bounce</span>
+            <span class="chip" onclick="copy('animate-none')">animate-none</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Hover lift + color change</div>
+        <div class="code-block"><span class="tag">&lt;button</span> <span class="attr">class=</span><span class="val">"bg-blue-500 text-white px-6 py-3 rounded-xl
+         transition-all duration-200 ease-out
+         hover:bg-blue-600 hover:scale-105 hover:shadow-lg
+         active:scale-95"</span><span class="tag">&gt;</span>
+  Button
+<span class="tag">&lt;/button&gt;</span></div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- STATES & VARIANTS -->
+    <section class="section" id="states">
+      <div class="section-header"><div class="section-dot"></div><h2>States & Variants</h2></div>
+      <p class="section-desc">Prefix any utility with a variant to scope it. Variants stack: <code class="cls">md:hover:bg-blue-600</code></p>
+
+      <div class="grid-2" style="margin-bottom:14px">
+        <div class="card">
+          <div class="card-label">Pseudo-class</div>
+          <div class="chips">
+            <span class="chip violet" onclick="copy('hover:')">hover:</span>
+            <span class="chip violet" onclick="copy('focus:')">focus:</span>
+            <span class="chip violet" onclick="copy('focus-within:')">focus-within:</span>
+            <span class="chip violet" onclick="copy('focus-visible:')">focus-visible:</span>
+            <span class="chip violet" onclick="copy('active:')">active:</span>
+            <span class="chip violet" onclick="copy('visited:')">visited:</span>
+            <span class="chip violet" onclick="copy('checked:')">checked:</span>
+            <span class="chip violet" onclick="copy('disabled:')">disabled:</span>
+            <span class="chip violet" onclick="copy('placeholder:')">placeholder:</span>
+            <span class="chip violet" onclick="copy('required:')">required:</span>
+            <span class="chip violet" onclick="copy('invalid:')">invalid:</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Pseudo-element</div>
+          <div class="chips">
+            <span class="chip orange" onclick="copy('before:')">before:</span>
+            <span class="chip orange" onclick="copy('after:')">after:</span>
+            <span class="chip orange" onclick="copy('first-line:')">first-line:</span>
+            <span class="chip orange" onclick="copy('first-letter:')">first-letter:</span>
+            <span class="chip orange" onclick="copy('selection:')">selection:</span>
+            <span class="chip orange" onclick="copy('placeholder:')">placeholder:</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Structural</div>
+          <div class="chips">
+            <span class="chip green" onclick="copy('first:')">first:</span>
+            <span class="chip green" onclick="copy('last:')">last:</span>
+            <span class="chip green" onclick="copy('odd:')">odd:</span>
+            <span class="chip green" onclick="copy('even:')">even:</span>
+            <span class="chip green" onclick="copy('only:')">only:</span>
+            <span class="chip green" onclick="copy('empty:')">empty:</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Group & Peer</div>
+          <div class="chips">
+            <span class="chip yellow" onclick="copy('group')">group</span>
+            <span class="chip yellow" onclick="copy('group-hover:')">group-hover:</span>
+            <span class="chip yellow" onclick="copy('group-focus:')">group-focus:</span>
+            <span class="chip yellow" onclick="copy('peer')">peer</span>
+            <span class="chip yellow" onclick="copy('peer-checked:')">peer-checked:</span>
+            <span class="chip yellow" onclick="copy('peer-focus:')">peer-focus:</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">group pattern — reveal child on parent hover</div>
+        <div class="code-block"><span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"group relative"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;img</span> <span class="attr">src=</span><span class="val">"photo.jpg"</span> <span class="attr">class=</span><span class="val">"w-full rounded-xl"</span> <span class="tag">/&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"absolute inset-0 bg-black/50 opacity-0
+              group-hover:opacity-100 transition-opacity
+              flex items-center justify-center rounded-xl"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;span</span> <span class="attr">class=</span><span class="val">"text-white font-bold"</span><span class="tag">&gt;</span>View<span class="tag">&lt;/span&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span></div>
+      </div>
+    </section>
+
+    <!-- DARK MODE -->
+    <section class="section" id="darkmode">
+      <div class="section-header"><div class="section-dot"></div><h2>Dark Mode</h2></div>
+      <p class="section-desc">Enable with <code class="cls">darkMode: 'class'</code> in config, then toggle the <code class="cls">dark</code> class on <code>&lt;html&gt;</code>.</p>
+
+      <div class="grid-2" style="margin-bottom:14px">
+        <div class="card">
+          <div class="card-label">config</div>
+          <div class="code-block" style="margin:0">darkMode: <span class="str">'class'</span>,
+<span class="cmt">// or 'media' for system pref</span></div>
+        </div>
+        <div class="card">
+          <div class="card-label">toggle JS</div>
+          <div class="code-block" style="margin:0">document.documentElement
+  .classList.toggle(<span class="str">'dark'</span>)</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Dark mode classes in practice</div>
+        <div class="code-block"><span class="tag">&lt;body</span> <span class="attr">class=</span><span class="val">"bg-white dark:bg-gray-900
+         text-gray-900 dark:text-gray-100"</span><span class="tag">&gt;</span>
+
+<span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"bg-gray-100 dark:bg-gray-800
+         border border-gray-200 dark:border-gray-700
+         rounded-xl p-6"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;h2</span> <span class="attr">class=</span><span class="val">"text-gray-900 dark:text-white"</span><span class="tag">&gt;</span>Card<span class="tag">&lt;/h2&gt;</span>
+<span class="tag">&lt;/div&gt;</span></div>
+      </div>
+    </section>
+
+    <!-- ARBITRARY VALUES -->
+    <section class="section" id="arbitrary">
+      <div class="section-header"><div class="section-dot"></div><h2>Arbitrary Values</h2></div>
+      <p class="section-desc">Escape the scale with square brackets. Works on any utility property.</p>
+
+      <div class="grid-2" style="margin-bottom:14px">
+        <div class="card">
+          <div class="card-label">Sizing & spacing</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('w-[342px]')">w-[342px]</span>
+            <span class="chip" onclick="copy('h-[calc(100vh-80px)]')">h-[calc(100vh-80px)]</span>
+            <span class="chip" onclick="copy('p-[13px]')">p-[13px]</span>
+            <span class="chip" onclick="copy('mt-[72px]')">mt-[72px]</span>
+            <span class="chip" onclick="copy('top-[117px]')">top-[117px]</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Colors & gradients</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('bg-[#1da1f2]')">bg-[#1da1f2]</span>
+            <span class="chip" onclick="copy('text-[#ff6b6b]')">text-[#ff6b6b]</span>
+            <span class="chip" onclick="copy('border-[#e2e8f0]')">border-[#e2e8f0]</span>
+            <span class="chip" onclick="copy('from-[#667eea]')">from-[#667eea]</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Grid</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('[grid-template-columns:2fr_1fr]')">[grid-template-columns:2fr_1fr]</span>
+            <span class="chip" onclick="copy('col-span-[7]')">col-span-[7]</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Misc</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('text-[clamp(1rem,5vw,3rem)]')">text-[clamp(1rem,5vw,3rem)]</span>
+            <span class="chip" onclick="copy('rotate-[17deg]')">rotate-[17deg]</span>
+            <span class="chip" onclick="copy('delay-[200ms]')">delay-[200ms]</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">CSS properties not in Tailwind yet</div>
+        <div class="code-block"><span class="cmt">&lt;!-- arbitrary CSS property --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"[mask-image:linear-gradient(to_bottom,black,transparent)]"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/div&gt;</span>
+
+<span class="cmt">&lt;!-- CSS variables --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"bg-[var(--brand-color)]"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/div&gt;</span></div>
+      </div>
+    </section>
+
+    <!-- PRO TIPS -->
+    <section class="section" id="tips">
+      <div class="section-header"><div class="section-dot"></div><h2>Pro Tips</h2></div>
+
+      <div class="grid-2" style="gap:14px">
+        <div class="card">
+          <div class="card-label">@apply — reuse utilities in CSS</div>
+          <div class="code-block" style="margin:0"><span class="attr">.btn-primary</span> {
+  <span class="attr">@apply</span> bg-blue-600 text-white
+         px-5 py-2.5 rounded-lg
+         font-semibold transition-colors
+         hover:bg-blue-700;
+}</div>
+        </div>
+        <div class="card">
+          <div class="card-label">theme() in CSS</div>
+          <div class="code-block" style="margin:0"><span class="attr">.hero</span> {
+  background: theme(<span class="str">'colors.blue.600'</span>);
+  padding: theme(<span class="str">'spacing.8'</span>);
+  font-size: theme(<span class="str">'fontSize.xl'</span>);
+}</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Extend the theme</div>
+          <div class="code-block" style="margin:0">theme: {
+  extend: {
+    colors: {
+      brand: <span class="str">'#6366f1'</span>,
+    },
+    screens: {
+      xs: <span class="str">'480px'</span>,
+    },
+    fontFamily: {
+      display: [<span class="str">'Sora'</span>, <span class="str">'sans-serif'</span>],
+    },
+  }
+}</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Safelist dynamic classes</div>
+          <div class="code-block" style="margin:0"><span class="cmt">// tailwind.config.js</span>
+safelist: [
+  <span class="str">'bg-red-500'</span>,
+  <span class="str">'bg-green-500'</span>,
+  {
+    pattern: <span class="str">/bg-(red|green|blue)-(400|500)/</span>,
+  }
+]</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Negative values</div>
+          <div class="chips">
+            <span class="chip" onclick="copy('-mt-4')">-mt-4</span>
+            <span class="chip" onclick="copy('-mx-6')">-mx-6</span>
+            <span class="chip" onclick="copy('-top-2')">-top-2</span>
+            <span class="chip" onclick="copy('-rotate-12')">-rotate-12</span>
+            <span class="chip" onclick="copy('-translate-x-1/2')">-translate-x-1/2</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">Important modifier</div>
+          <div class="code-block" style="margin:0"><span class="cmt">&lt;!-- prefix with ! for !important --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"!text-red-500 !font-bold"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/div&gt;</span></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:14px">
+        <div class="card-label">Full component example — responsive card with dark mode</div>
+        <div class="code-block"><span class="tag">&lt;article</span> <span class="attr">class=</span><span class="val">"
+  group
+  bg-white dark:bg-gray-900
+  border border-gray-200 dark:border-gray-700
+  rounded-2xl overflow-hidden
+  shadow-sm hover:shadow-xl
+  transition-all duration-300 hover:-translate-y-1
+  flex flex-col
+"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"relative overflow-hidden aspect-video"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;img</span> <span class="attr">class=</span><span class="val">"w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"</span> <span class="tag">/&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"p-6 flex flex-col gap-3 flex-1"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;span</span> <span class="attr">class=</span><span class="val">"text-xs font-semibold uppercase tracking-wider text-blue-500"</span><span class="tag">&gt;</span>Tag<span class="tag">&lt;/span&gt;</span>
+    <span class="tag">&lt;h3</span> <span class="attr">class=</span><span class="val">"text-xl font-bold text-gray-900 dark:text-white leading-snug"</span><span class="tag">&gt;</span>Title<span class="tag">&lt;/h3&gt;</span>
+    <span class="tag">&lt;p</span> <span class="attr">class=</span><span class="val">"text-gray-500 dark:text-gray-400 text-sm line-clamp-3"</span><span class="tag">&gt;</span>Body<span class="tag">&lt;/p&gt;</span>
+    <span class="tag">&lt;a</span> <span class="attr">class=</span><span class="val">"mt-auto self-start text-blue-600 dark:text-blue-400 font-semibold text-sm hover:underline"</span><span class="tag">&gt;</span>Read more →<span class="tag">&lt;/a&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/article&gt;</span></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  function copy(text) {
+    navigator.clipboard.writeText(text).then(() => {
+      const t = document.getElementById('toast');
+      t.textContent = `Copied: ${text}`;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 1600);
+    });
+  }
+
+  function filterClasses(q) {
+    q = q.toLowerCase().trim();
+    const chips = document.querySelectorAll('.chip');
+    chips.forEach(c => {
+      c.style.display = (!q || c.textContent.toLowerCase().includes(q)) ? '' : 'none';
+    });
+  }
+
+  // Active sidebar link on scroll
+  const sections = document.querySelectorAll('.section');
+  const links = document.querySelectorAll('.sidebar nav a');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.sidebar nav a[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { threshold: 0.3 });
+  sections.forEach(s => obs.observe(s));
+</script>
+
+</body>
+</html>
