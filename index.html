@@ -1,1454 +1,1221 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tailwind CSS Cheatbook</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #0f1117;
-    --surface: #181c27;
-    --surface2: #1f2437;
-    --border: #2a3050;
-    --cyan: #22d3ee;
-    --cyan-dim: #0e7490;
-    --violet: #a78bfa;
-    --green: #34d399;
-    --orange: #fb923c;
-    --red: #f87171;
-    --yellow: #fbbf24;
-    --text: #e2e8f0;
-    --muted: #64748b;
-    --code-bg: #0d1117;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tailwind CSS Cheatsheet - Complete Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap');
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    line-height: 1.6;
-    min-height: 100vh;
-  }
+        code,
+        pre {
+            font-family: 'Fira Code', monospace;
+        }
 
-  /* Layout */
-  .layout { display: flex; min-height: 100vh; }
+        .code-block {
+            background: #1e293b;
+            border-radius: 0.5rem;
+            position: relative;
+        }
 
-  /* Sidebar */
-  .sidebar {
-    width: 220px;
-    min-width: 220px;
-    background: var(--surface);
-    border-right: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    overflow-y: auto;
-    padding: 24px 0;
-    scrollbar-width: thin;
-    scrollbar-color: var(--border) transparent;
-  }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
 
-  .sidebar-logo {
-    padding: 0 20px 20px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 16px;
-  }
+        .code-block:hover .copy-btn {
+            opacity: 1;
+        }
 
-  .sidebar-logo span {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--cyan);
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
+        .search-highlight {
+            background-color: #fef08a;
+            padding: 0.1rem 0.2rem;
+            border-radius: 0.25rem;
+        }
 
-  .sidebar-logo p {
-    font-size: 11px;
-    color: var(--muted);
-    margin-top: 2px;
-  }
+        .smooth-scroll {
+            scroll-behavior: smooth;
+        }
 
-  .sidebar nav a {
-    display: block;
-    padding: 6px 20px;
-    color: var(--muted);
-    text-decoration: none;
-    font-size: 13px;
-    border-left: 2px solid transparent;
-    transition: all 0.15s;
-  }
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-  .sidebar nav a:hover, .sidebar nav a.active {
-    color: var(--cyan);
-    border-left-color: var(--cyan);
-    background: rgba(34, 211, 238, 0.06);
-  }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
 
-  .sidebar-section-label {
-    padding: 14px 20px 4px;
-    font-size: 10px;
-    font-weight: 600;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
+        .example-box {
+            transition: all 0.3s ease;
+        }
 
-  /* Search */
-  .search-wrap {
-    padding: 0 12px 16px;
-  }
+        .example-box:hover {
+            transform: translateY(-2px);
+        }
 
-  .search-wrap input {
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 7px 12px;
-    border-radius: 6px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    outline: none;
-    transition: border-color 0.15s;
-  }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
 
-  .search-wrap input:focus { border-color: var(--cyan); }
-  .search-wrap input::placeholder { color: var(--muted); }
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
 
-  /* Main */
-  .main {
-    flex: 1;
-    overflow-y: auto;
-    padding: 40px 48px;
-    max-width: 900px;
-  }
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 5px;
+        }
 
-  /* Hero */
-  .hero {
-    margin-bottom: 48px;
-    padding-bottom: 32px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .hero-eyebrow {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--cyan);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-  }
-
-  .hero h1 {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 36px;
-    font-weight: 700;
-    line-height: 1.1;
-    background: linear-gradient(135deg, #fff 30%, var(--cyan) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 12px;
-  }
-
-  .hero p {
-    color: var(--muted);
-    max-width: 560px;
-    font-size: 15px;
-  }
-
-  /* Section */
-  .section {
-    margin-bottom: 52px;
-    scroll-margin-top: 24px;
-  }
-
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-
-  .section-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--cyan);
-    flex-shrink: 0;
-  }
-
-  .section h2 {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 18px;
-    font-weight: 700;
-    color: #fff;
-  }
-
-  .section-desc {
-    color: var(--muted);
-    margin-bottom: 20px;
-    font-size: 13px;
-    max-width: 600px;
-  }
-
-  /* Grid */
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-
-  @media (max-width: 700px) {
-    .grid-2, .grid-3 { grid-template-columns: 1fr; }
-    .main { padding: 24px 20px; }
-    .sidebar { display: none; }
-  }
-
-  /* Card */
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 14px 16px;
-    transition: border-color 0.15s;
-  }
-
-  .card:hover { border-color: var(--cyan-dim); }
-
-  .card-label {
-    font-size: 11px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 6px;
-    font-weight: 600;
-  }
-
-  /* Code */
-  code, .mono {
-    font-family: 'JetBrains Mono', monospace;
-  }
-
-  .code-block {
-    background: var(--code-bg);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 16px 18px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12.5px;
-    line-height: 1.7;
-    overflow-x: auto;
-    margin-bottom: 10px;
-    white-space: pre;
-  }
-
-  .tag { color: var(--orange); }
-  .attr { color: var(--violet); }
-  .val { color: var(--green); }
-  .cmt { color: #4a5568; font-style: italic; }
-  .kw { color: var(--cyan); }
-  .str { color: var(--yellow); }
-
-  /* Utility table */
-  .util-table { width: 100%; border-collapse: collapse; }
-
-  .util-table th {
-    text-align: left;
-    font-size: 11px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    padding: 6px 12px;
-    border-bottom: 1px solid var(--border);
-    font-weight: 600;
-  }
-
-  .util-table td {
-    padding: 7px 12px;
-    border-bottom: 1px solid rgba(42,48,80,0.5);
-    font-size: 13px;
-    vertical-align: top;
-  }
-
-  .util-table tr:last-child td { border-bottom: none; }
-  .util-table tr:hover td { background: rgba(34,211,238,0.03); }
-
-  .cls {
-    font-family: 'JetBrains Mono', monospace;
-    color: var(--cyan);
-    font-size: 12px;
-    background: rgba(34,211,238,0.08);
-    padding: 1px 6px;
-    border-radius: 4px;
-    display: inline-block;
-  }
-
-  .css-val {
-    font-family: 'JetBrains Mono', monospace;
-    color: var(--muted);
-    font-size: 12px;
-  }
-
-  /* Chips */
-  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
-
-  .chip {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    padding: 3px 10px;
-    border-radius: 4px;
-    border: 1px solid var(--border);
-    color: var(--cyan);
-    background: rgba(34,211,238,0.06);
-    cursor: pointer;
-    transition: all 0.12s;
-    user-select: all;
-  }
-
-  .chip:hover { background: rgba(34,211,238,0.15); border-color: var(--cyan-dim); }
-  .chip.violet { color: var(--violet); background: rgba(167,139,250,0.07); border-color: rgba(167,139,250,0.25); }
-  .chip.green { color: var(--green); background: rgba(52,211,153,0.07); border-color: rgba(52,211,153,0.25); }
-  .chip.orange { color: var(--orange); background: rgba(251,146,60,0.07); border-color: rgba(251,146,60,0.25); }
-  .chip.red { color: var(--red); background: rgba(248,113,113,0.07); border-color: rgba(248,113,113,0.25); }
-  .chip.yellow { color: var(--yellow); background: rgba(251,191,36,0.07); border-color: rgba(251,191,36,0.25); }
-
-  /* Divider */
-  .divider { height: 1px; background: var(--border); margin: 32px 0; }
-
-  /* Scale visual */
-  .scale-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 6px;
-  }
-
-  .scale-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); width: 48px; flex-shrink: 0; }
-  .scale-bar-wrap { flex: 1; background: var(--surface2); border-radius: 3px; height: 14px; overflow: hidden; }
-  .scale-bar { height: 100%; background: linear-gradient(90deg, var(--cyan-dim), var(--cyan)); border-radius: 3px; }
-  .scale-px { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); width: 60px; text-align: right; }
-
-  /* Color swatch */
-  .swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(56px, 1fr)); gap: 6px; }
-  .swatch { border-radius: 6px; height: 36px; border: 1px solid rgba(255,255,255,0.06); }
-  .swatch-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); text-align: center; margin-top: 3px; }
-
-  /* Breakpoint visual */
-  .bp-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(42,48,80,0.5);
-  }
-  .bp-row:last-child { border-bottom: none; }
-  .bp-name { font-family: 'JetBrains Mono', monospace; color: var(--cyan); width: 40px; font-size: 13px; font-weight: 700; }
-  .bp-px { font-family: 'JetBrains Mono', monospace; color: var(--yellow); font-size: 12px; width: 80px; }
-  .bp-bar-wrap { flex: 1; background: var(--surface2); border-radius: 3px; height: 8px; }
-  .bp-bar { height: 100%; border-radius: 3px; }
-
-  /* Tag */
-  .badge {
-    display: inline-block;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 1px 7px;
-    border-radius: 99px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    vertical-align: middle;
-    margin-left: 6px;
-  }
-  .badge-new { background: rgba(52,211,153,0.15); color: var(--green); border: 1px solid rgba(52,211,153,0.3); }
-  .badge-tip { background: rgba(251,191,36,0.12); color: var(--yellow); border: 1px solid rgba(251,191,36,0.25); }
-
-  /* Copied toast */
-  #toast {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    background: var(--green);
-    color: #0d1117;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    font-weight: 700;
-    padding: 8px 16px;
-    border-radius: 6px;
-    opacity: 0;
-    transform: translateY(8px);
-    transition: all 0.2s;
-    pointer-events: none;
-    z-index: 1000;
-  }
-  #toast.show { opacity: 1; transform: translateY(0); }
-
-  /* Scrollbar */
-  ::-webkit-scrollbar { width: 5px; height: 5px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-</style>
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+    </style>
 </head>
-<body>
 
-<div id="toast">Copied!</div>
+<body class="bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-gray-100 smooth-scroll">
 
-<div class="layout">
+    <!-- Floating Navbar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-slate-900/80 border-b border-slate-700 shadow-lg">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-wind text-cyan-400 text-2xl"></i>
+                    <span class="text-xl font-bold gradient-text">Tailwind Cheatsheet</span>
+                </div>
 
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <div class="sidebar-logo">
-      <span>TW Cheatbook</span>
-      <p>v3 / v4 reference</p>
+                <!-- Search Bar -->
+                <div class="flex-1 max-w-md mx-8">
+                    <div class="relative">
+                        <input type="text" id="searchInput" placeholder="Search classes... (e.g., 'flex', 'bg-blue')"
+                            class="w-full px-4 py-2 pl-10 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 text-sm">
+                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                    </div>
+                </div>
+
+                <!-- Theme Toggle -->
+                <button id="themeToggle" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 transition">
+                    <i class="fas fa-moon text-cyan-400"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar Navigation -->
+    <aside
+        class="fixed left-0 top-16 bottom-0 w-64 bg-slate-900/95 backdrop-blur-sm border-r border-slate-700 overflow-y-auto z-40 hidden lg:block">
+        <div class="p-4">
+            <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">Categories</h3>
+            <nav class="space-y-1" id="sidebarNav">
+                <!-- Generated by JavaScript -->
+            </nav>
+        </div>
+    </aside>
+
+    <!-- Mobile Menu Button -->
+    <button id="mobileMenuBtn"
+        class="lg:hidden fixed bottom-4 right-4 z-50 p-4 bg-cyan-500 rounded-full shadow-lg hover:bg-cyan-600 transition">
+        <i class="fas fa-bars text-white"></i>
+    </button>
+
+    <!-- Mobile Sidebar -->
+    <div id="mobileSidebar" class="lg:hidden fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" id="mobileOverlay"></div>
+        <aside class="absolute left-0 top-0 bottom-0 w-64 bg-slate-900 overflow-y-auto">
+            <div class="p-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-bold">Menu</h3>
+                    <button id="closeMobileMenu" class="p-2 hover:bg-slate-800 rounded">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <nav class="space-y-1" id="mobileSidebarNav">
+                    <!-- Generated by JavaScript -->
+                </nav>
+            </div>
+        </aside>
     </div>
 
-    <div class="search-wrap">
-      <input type="text" id="search" placeholder="Search classes…" oninput="filterClasses(this.value)">
-    </div>
+    <!-- Main Content -->
+    <main class="lg:ml-64 pt-20 min-h-screen">
+        <div class="container mx-auto px-4 py-8 max-w-6xl">
 
-    <div class="sidebar-section-label">Core</div>
-    <nav>
-      <a href="#setup">Setup</a>
-      <a href="#spacing">Spacing Scale</a>
-      <a href="#breakpoints">Breakpoints</a>
-      <a href="#colors">Colors</a>
-    </nav>
+            <!-- Hero Section -->
+            <div class="text-center mb-16 animate-fade-in">
+                <h1 class="text-5xl md:text-7xl font-bold mb-4 gradient-text">
+                    Tailwind CSS Cheatsheet
+                </h1>
+                <p class="text-xl text-gray-400 mb-8">
+                    Complete guide from beginner to advanced • Interactive examples • Copy & paste ready
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="#layout"
+                        class="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg font-semibold hover:shadow-lg hover:scale-105 transition transform">
+                        Get Started
+                    </a>
+                    <a href="https://tailwindcss.com/docs" target="_blank"
+                        class="px-6 py-3 bg-slate-800 rounded-lg font-semibold hover:bg-slate-700 transition">
+                        Official Docs <i class="fas fa-external-link-alt ml-2 text-sm"></i>
+                    </a>
+                </div>
+            </div>
 
-    <div class="sidebar-section-label">Layout</div>
-    <nav>
-      <a href="#display">Display</a>
-      <a href="#flexbox">Flexbox</a>
-      <a href="#grid">Grid</a>
-      <a href="#positioning">Positioning</a>
-      <a href="#sizing">Sizing</a>
-    </nav>
+            <!-- Content Sections -->
+            <div id="content">
+                <!-- Layout Section -->
+                <section id="layout" class="mb-16 scroll-mt-20">
+                    <div class="mb-8">
+                        <h2 class="text-4xl font-bold mb-2 flex items-center gap-3">
+                            <i class="fas fa-th text-cyan-400"></i>
+                            Layout
+                        </h2>
+                        <p class="text-gray-400">Control the layout and positioning of elements</p>
+                    </div>
 
-    <div class="sidebar-section-label">Typography</div>
-    <nav>
-      <a href="#typography">Font & Text</a>
-    </nav>
+                    <!-- Container -->
+                    <div class="mb-8 bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+                        <h3 class="text-2xl font-semibold mb-4 text-cyan-400">Container</h3>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="code-block p-4">
+                                <button class="copy-btn px-3 py-1 bg-cyan-500 hover:bg-cyan-600 rounded text-sm"
+                                    onclick="copyCode(this)">
+                                    <i class="fas fa-copy"></i> Copy
+                                </button>
+                                <pre class="text-sm text-gray-300"><code>container          <span class="text-gray-500">/* Centers content */</span>
+mx-auto           <span class="text-gray-500">/* Center horizontally */</span></code></pre>
+                            </div>
+                            <div class="bg-slate-900 p-4 rounded-lg">
+                                <p class="text-sm text-gray-400 mb-2">Example:</p>
+                                <div
+                                    class="container mx-auto bg-cyan-500/20 border-2 border-cyan-500 rounded p-3 text-center">
+                                    Container Element
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-    <div class="sidebar-section-label">Visuals</div>
-    <nav>
-      <a href="#background">Background</a>
-      <a href="#borders">Borders</a>
-      <a href="#effects">Effects & Shadows</a>
-      <a href="#transforms">Transforms</a>
-      <a href="#transitions">Transitions & Animation</a>
-    </nav>
+                    <!-- Display -->
+                    <div class="mb-8 bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+                        <h3 class="text-2xl font-semibold mb-4 text-cyan-400">Display</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <div class="class-badge">block</div>
+                            <div class="class-badge">inline-block</div>
+                            <div class="class-badge">inline</div>
+                            <div class="class-badge">flex</div>
+                            <div class="class-badge">inline-flex</div>
+                            <div class="class-badge">grid</div>
+                            <div class="class-badge">inline-grid</div>
+                            <div class="class-badge">hidden</div>
+                        </div>
+                        <div class="mt-4">
+                            <div class="code-block p-4">
+                                <button class="copy-btn px-3 py-1 bg-cyan-500 hover:bg-cyan-600 rounded text-sm"
+                                    onclick="copyCode(this)">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                                <pre class="text-sm text-gray-300"><code>&lt;div class="<span class="text-yellow-300">flex</span> items-center justify-center"&gt;
+  Flexbox Container
+&lt;/div&gt;</code></pre>
+                            </div>
+                        </div>
+                    </div>
 
-    <div class="sidebar-section-label">Interaction</div>
-    <nav>
-      <a href="#states">States & Variants</a>
-      <a href="#darkmode">Dark Mode</a>
-      <a href="#arbitrary">Arbitrary Values</a>
-      <a href="#tips">Pro Tips</a>
-    </nav>
-  </aside>
+                    <!-- Position -->
+                    <div class="mb-8 bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+                        <h3 class="text-2xl font-semibold mb-4 text-cyan-400">Position</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
+                            <div class="class-badge">static</div>
+                            <div class="class-badge">relative</div>
+                            <div class="class-badge">absolute</div>
+                            <div class="class-badge">fixed</div>
+                            <div class="class-badge">sticky</div>
+                        </div>
+                        <div class="grid md:grid-cols-4 gap-3">
+                            <div class="class-badge">top-0</div>
+                            <div class="class-badge">right-0</div>
+                            <div class="class-badge">bottom-0</div>
+                            <div class="class-badge">left-0</div>
+                            <div class="class-badge">inset-0</div>
+                            <div class="class-badge">inset-x-0</div>
+                            <div class="class-badge">inset-y-0</div>
+                            <div class="class-badge">top-1/2</div>
+                        </div>
+                    </div>
+                </section>
 
-  <!-- Main -->
-  <main class="main">
+                <!-- Flexbox Section -->
+                <section id="flexbox" class="mb-16 scroll-mt-20">
+                    <div class="mb-8">
+                        <h2 class="text-4xl font-bold mb-2 flex items-center gap-3">
+                            <i class="fas fa-grip-horizontal text-purple-400"></i>
+                            Flexbox
+                        </h2>
+                        <p class="text-gray-400">Flexible box layout utilities</p>
+                    </div>
 
-    <div class="hero">
-      <p class="hero-eyebrow">// quick reference</p>
-      <h1>Tailwind CSS<br>Cheatbook</h1>
-      <p>Every class you'll actually reach for — from spacing and flexbox to dark mode, arbitrary values, and pro patterns. Click any class to copy it.</p>
-    </div>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Flex Direction -->
+                        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+                            <h3 class="text-xl font-semibold mb-4 text-purple-400">Flex Direction</h3>
+                            <div class="space-y-2 mb-4">
+                                <div class="class-badge">flex-row</div>
+                                <div class="class-badge">flex-row-reverse</div>
+                                <div class="class-badge">flex-col</div>
+                                <div class="class-badge">flex-col-reverse</div>
+                            </div>
+                            <div class="bg-slate-900 p-4 rounded-lg">
+                                <div class="flex flex-row gap-2">
+                                    <div class="bg-purple-500 p-3 rounded">1</div>
+                                    <div class="bg-purple-500 p-3 rounded">2</div>
+                                    <div class="bg-purple-500 p-3 rounded">3</div>
+                                </div>
+                            </div>
+                        </div>
 
-    <!-- SETUP -->
-    <section class="section" id="setup">
-      <div class="section-header"><div class="section-dot"></div><h2>Setup</h2></div>
-      <p class="section-desc">Get Tailwind running in minutes. Vite is the fastest path for new projects.</p>
+                        <!-- Justify Content -->
+                        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+                            <h3 class="text-xl font-semibold mb-4 text-purple-400">Justify Content</h3>
+                            <div class="space-y-2 mb-4">
+                                <div class="class-badge">justify-start</div>
+                                <div class="class-badge">justify-center</div>
+                                <div class="class-badge">justify-end</div>
+                                <div class="class-badge">justify-between</div>
+                                <div class="class-badge">justify-around</div>
+                                <div class="class-badge">justify-evenly</div>
+                            </div>
+                            <div class="bg-slate-900 p-4 rounded-lg">
+                                <div class="flex justify-between">
+                                    <div class="bg-purple-500 p-3 rounded">1</div>
+                                    <div class="bg-purple-500 p-3 rounded">2</div>
+                                    <div class="bg-purple-500 p-3 rounded">3</div>
+                                </div>
+                            </div>
+                        </div>
 
-      <div class="card" style="margin-bottom:10px">
-        <div class="card-label">Install via npm (v3)</div>
-        <div class="code-block"><span class="kw">npm</span> install -D tailwindcss postcss autoprefixer
-<span class="kw">npx</span> tailwindcss init -p</div>
-      </div>
+                        <!-- Align Items -->
+                        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+                            <h3 class="text-xl font-semibold mb-4 text-purple-400">Align Items</h3>
+                            <div class="space-y-2 mb-4">
+                                <div class="class-badge">items-start</div>
+                                <div class="class-badge">items-center</div>
+                                <div class="class-badge">items-end</div>
+                                <div class="class-badge">items-stretch</div>
+                                <div class="class-badge">items-baseline</div>
+                            </div>
+                        </div>
 
-      <div class="card" style="margin-bottom:10px">
-        <div class="card-label">tailwind.config.js — content paths</div>
-        <div class="code-block"><span class="cmt">// tailwind.config.js</span>
-<span class="kw">module</span>.exports = {
-  content: [<span class="str">"./src/**/*.{html,js,jsx,ts,tsx,vue}"</span>],
-  theme: { extend: {} },
-  plugins: [],
-}</div>
-      </div>
+                        <!-- Gap -->
+                        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+                            <h3 class="text-xl font-semibold mb-4 text-purple-400">Gap</h3>
+                            <div class="grid grid-cols-3 gap-2">
+                                <div class="class-badge">gap-0</div>
+                                <div class="class-badge">gap-1</div>
+                                <div class="class-badge">gap-2</div>
+                                <div class="class-badge">gap-4</div>
+                                <div class="class-badge">gap-8</div>
+                                <div class="class-badge">gap-16</div>
+                                <div class="class-badge">gap-x-4</div>
+                                <div class="class-badge">gap-y-2</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
-      <div class="card">
-        <div class="card-label">globals.css — directives</div>
-        <div class="code-block"><span class="attr">@tailwind</span> base;
-<span class="attr">@tailwind</span> components;
-<span class="attr">@tailwind</span> utilities;</div>
-      </div>
-    </section>
+                <!-- Grid Section -->
+                <section id="grid" class="mb-16 scroll-mt-20">
+                    <div class="mb-8">
+                        <h2 class="text-4xl font-bold mb-2 flex items-center gap-3">
+                            <i class="fas fa-th-large text-green-400"></i>
+                            Grid
+                        </h2>
+                        <p class="text-gray-400">CSS Grid layout system</p>
+                    </div>
 
-    <!-- SPACING SCALE -->
-    <section class="section" id="spacing">
-      <div class="section-header"><div class="section-dot"></div><h2>Spacing Scale</h2></div>
-      <p class="section-desc">Tailwind's default scale — 1 unit = 4px. Used for <code class="cls">p-</code>, <code class="cls">m-</code>, <code class="cls">gap-</code>, <code class="cls">w-</code>, <code class="cls">h-</code>, and more.</p>
+                    <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700 mb-6">
+                        <h3 class="text-xl font-semibold mb-4 text-green-400">Grid Template Columns</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                            <div class="class-badge">grid-cols-1</div>
+                            <div class="class-badge">grid-cols-2</div>
+                            <div class="class-badge">grid-cols-3</div>
+                            <div class="class-badge">grid-cols-4</div>
+                            <div class="class-badge">grid-cols-6</div>
+                            <div class="class-badge">grid-cols-12</div>
+                        </div>
+                        <div class="bg-slate-900 p-4 rounded-lg">
+                            <div class="grid grid-cols-3 gap-2">
+                                <div class="bg-green-500 p-4 rounded text-center">1</div>
+                                <div class="bg-green-500 p-4 rounded text-center">2</div>
+                                <div class="bg-green-500 p-4 rounded text-center">3</div>
+                            </div>
+                        </div>
+                    </div>
 
-      <div class="card">
-        <div style="padding:4px 0">
-          <div class="scale-row"><span class="scale-label">0</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:0%"></div></div><span class="scale-px">0px</span></div>
-          <div class="scale-row"><span class="scale-label">0.5</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:1%"></div></div><span class="scale-px">2px</span></div>
-          <div class="scale-row"><span class="scale-label">1</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:1.5%"></div></div><span class="scale-px">4px</span></div>
-          <div class="scale-row"><span class="scale-label">2</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:3%"></div></div><span class="scale-px">8px</span></div>
-          <div class="scale-row"><span class="scale-label">3</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:4.5%"></div></div><span class="scale-px">12px</span></div>
-          <div class="scale-row"><span class="scale-label">4</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:6%"></div></div><span class="scale-px">16px</span></div>
-          <div class="scale-row"><span class="scale-label">5</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:7.5%"></div></div><span class="scale-px">20px</span></div>
-          <div class="scale-row"><span class="scale-label">6</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:9%"></div></div><span class="scale-px">24px</span></div>
-          <div class="scale-row"><span class="scale-label">8</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:12%"></div></div><span class="scale-px">32px</span></div>
-          <div class="scale-row"><span class="scale-label">10</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:15%"></div></div><span class="scale-px">40px</span></div>
-          <div class="scale-row"><span class="scale-label">12</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:18%"></div></div><span class="scale-px">48px</span></div>
-          <div class="scale-row"><span class="scale-label">16</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:24%"></div></div><span class="scale-px">64px</span></div>
-          <div class="scale-row"><span class="scale-label">20</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:30%"></div></div><span class="scale-px">80px</span></div>
-          <div class="scale-row"><span class="scale-label">24</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:36%"></div></div><span class="scale-px">96px</span></div>
-          <div class="scale-row"><span class="scale-label">32</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:48%"></div></div><span class="scale-px">128px</span></div>
-          <div class="scale-row"><span class="scale-label">48</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:72%"></div></div><span class="scale-px">192px</span></div>
-          <div class="scale-row"><span class="scale-label">64</span><div class="scale-bar-wrap"><div class="scale-bar" style="width:96%"></div></div><span class="scale-px">256px</span></div>
+                    <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+                        <h3 class="text-xl font-semibold mb-4 text-green-400">Column Span</h3>
+                        <div class="grid grid-cols-3 gap-3 mb-4">
+                            <div class="class-badge">col-span-1</div>
+                            <div class="class-badge">col-span-2</div>
+                            <div class="class-badge">col-span-full</div>
+                        </div>
+                        <div class="bg-slate-900 p-4 rounded-lg">
+                            <div class="grid grid-cols-3 gap-2">
+                                <div class="col-span-2 bg-green-500 p-4 rounded">col-span-2</div>
+                                <div class="bg-green-500 p-4 rounded">1</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Spacing Section -->
+                <section id="spacing" class="mb-16 scroll-mt-20">
+                    <div class="mb-8">
+                        <h2 class="text-4xl font-bold mb-2 flex items-center gap-3">
+                            <i class="fas fa-arrows-alt text-orange-400"></i>
+                            Spacing
+                        </h2>
+                        <p class="text-gray-400">Padding and margin utilities</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+                            <h3 class="text-xl font-semibold mb-4 text-orange-400">Padding</h3>
+                            <div class="code-block p-4 mb-4">
+                                <pre class="text-sm text-gray-300"><code>p-0  p-1  p-2  p-4  p-6  p-8  p-12  p-16
+px-4    <span class="text-gray-500">/* horizontal */</span>
+py-2    <span class="text-gray-500">/* vertical */</span>
+pt-4    <span class="text-gray-500">/* top */</span>
+pr-4    <span class="text-gray-500">/* right */</span>
+pb-4    <span class="text-gray-500">/* bottom */</span>
+pl-4    <span class="text-gray-500">/* left */</span></code></pre>
+                            </div>
+                            <div class="bg-slate-900 p-4 rounded-lg">
+                                <div class="bg-orange-500/20 border-2 border-orange-500 rounded">
+                                    <div class="p-8 bg-orange-500 rounded">p-8</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+                            <h3 class="text-xl font-semibold mb-4 text-orange-400">Margin</h3>
+                            <div class="code-block p-4 mb-4">
+                                <pre class="text-sm text-gray-300"><code>m-0  m-1  m-2  m-4  m-6  m-8  m-12  m-16
+mx-auto <span class="text-gray-500">/* center */</span>
+my-4    <span class="text-gray-500">/* vertical */</span>
+mt-4    <span class="text-gray-500">/* top */</span>
+-m-4    <span class="text-gray-500">/* negative */</span></code></pre>
+                            </div>
+                            <div class="bg-slate-900 p-4 rounded-lg">
+                                <div class="m-4 bg-orange-500 p-4 rounded">m-4</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Typography Section -->
+                <section id="typography" class="mb-16 scroll-mt-20">
+                    <div class="mb-8">
+                        <h2 class="text-4xl font-bold mb-2 flex items-center gap-3">
+                            <i class="fas fa-font text-pink-400"></i>
+                            Typography
+                        </h2>
+                        <p class="text-gray-400">Text styling and formatting</p>
+                    </div>
+
+                    <!-- Font Size -->
+                    <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700 mb-6">
+                        <h3 class="text-xl font-semibold mb-4 text-pink-400">Font Size</h3>
+                        <div class="space-y-3 bg-slate-900 p-4 rounded-lg">
+                            <div class="text-xs">text-xs - Extra Small (12px)</div>
+                            <div class="text-sm">text-sm - Small (14px)</div>
+                            <div class="text-base">text-base - Base (16px)</div>
+                            <div class="text-lg">text-lg - Large (18px)</div>
+                            <div class="text-xl">text-xl - Extra Large (20px)</div>
+                            <div class="text-2xl">text-2xl - 2X Large (24px)</div>
+                            <div class="text-3xl">text-3xl - 3X Large (30px)</div>
+                            <div class="text-4xl">text-4xl - 4X Large (36px)</div>
+                        </div>
+                    </div>
+
+                    <!-- Font Weight -->
+                    <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700 mb-6">
+                        <h3 class="text-xl font-semibold mb-4 text-pink-400">Font Weight</h3>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="bg-slate-900 p-4 rounded-lg space-y-2">
+                                <div class="font-thin">font-thin (100)</div>
+                                <div class="font-extralight">font-extralight (200)</div>
+                                <div class="font-light">font-light (300)</div>
+                                <div class="font-normal">font-normal (400)</div>
+                                <div class="font-medium">font-medium (500)</div>
+                            </div>
+                            <div class="bg-slate-900 p-4 rounded-lg space-y-2">
+                                <div class="font-semibold">font-semibold (600)</div>
+                                <div class="font-bold">font-bold (700)</div>
+                                <div class="font-extrabold">font-extrabold (800)</div>
+                                <div class="font-black">font-black (900)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Text Alignment -->
+                    <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700 mb-6">
+                        <h3 class="text-xl font-semibold mb-4 text-pink-400">Text Alignment</h3>
+                        <div class="bg-slate-900 p-4 rounded-lg space-y-4">
+                            <div class="text-left border border-pink-500/30 p-2 rounded">text-left</div>
+                            <div class="text-center border border-pink-500/30 p-2 rounded">text-center</div>
+                            <div class="text-right border border-pink-500/30 p-2 rounded">text-right</div>
+                            <div class="text-justify border border-pink-500/30 p-2 rounded">text-justify - Lorem ipsum
+                                dolor sit amet consectetur adipisicing elit.</div>
+                        </div>
+                    </div>
+
+                    <!-- Text Transform -->
+                    <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+                        <h3 class="text-xl font-semibold mb-4 text-pink-400">Text Transform & Decoration</h3>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="bg-slate-900 p-4 rounded-lg space-y-3">
+                                <div class="uppercase">uppercase</div>
+                                <div class="lowercase">LOWERCASE</div>
+                                <div class="capitalize">capitalize text</div>
+                                <div class="normal-case">Normal Case</div>
+                            </div>
+                            <div class="bg-slate-900 p-4 rounded-lg space-y-3">
+                                <div class="underline">underline</div>
+                                <div class="line-through">line-through</div>
+                                <div class="overline">overline</div>
+                                <div class="no-underline">no-underline</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Colors Section -->
+                <section id="colors" class="mb-16 scroll-mt-20">
+                    <div class="mb-8">
+                        <h2 class="text-4xl font-bold mb-2 flex items-center gap-3">
+                            <i class="fas fa-palette text-yellow-400"></i>
+                            Colors
+                        </h2>
+                        <p class="text-gray-400">Background and text colors</p>
+                    </div>
+
+                    <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+                        <h3 class="text-xl font-semibold mb-4 text-yellow-400">Color Palette</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
+                            <div class="space-y-2">
+                                <div class="bg-gray-500 h-12 rounded"></div>
+                                <div class="text-xs text-center">Gray</div>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="bg-red-500 h-12 rounded"></div>
+                                <div class="text-xs text-center">Red</div>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="bg-orange-500 h-12 rounded"></div>
+                                <div class="text-xs text-center">Orange</div>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="bg-yellow-500 h-12 rounded"></div>
+                                <div class="text-xs text-center">Yellow</div>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="bg-green-500 h-12 rounded"></div>
+                                <div class="text-xs text-center">Green</div>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="bg-teal-500 h-12 rounded"></div>
+                                <div class="text-xs text-center">Teal</div>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="bg-blue-500 h-12 rounded"></div>
+                                <div class="text-xs text-center">Blue</div>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="bg-indigo-500 h-12 rounded"></div>
+                                <div class="text-xs text-center">Indigo</div>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="bg-purple-500 h-12 rounded"></div>
+                                <div class="text-xs text-center">Purple</div>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="bg-pink-500 h-12 rounded"></div>
+                                <div class="text-xs text-center">Pink</div>
+                            </div>
+                        </div>
+                        <div class="mt-6 code-block p-4">
+                            <pre class="text-sm text-gray-300"><code><span class="text-gray-500">/* Shades: 50, 100, 200, 300, 400, 500, 600, 700, 800, 900 */</span>
+bg-blue-50   bg-blue-500   bg-blue-900
+text-red-50  text-red-500  text-red-900</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Borders Section -->
+                <section id="borders" class="mb-16 scroll-mt-20">
+                    <div class="mb-8">
+                        <h2 class="text-4xl font-bold mb-2 flex items-center gap-3">
+                            <i class="fas fa-square text-blue-400"></i>
+                            Borders
+                        </h2>
+                        <p class="text-gray-400">Border width, color, and radius</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Border Width -->
+                        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+                            <h3 class="text-xl font-semibold mb-4 text-blue-400">Border Width</h3>
+                            <div class="space-y-3 bg-slate-900 p-4 rounded-lg">
+                                <div class="border p-3 rounded">border</div>
+                                <div class="border-2 p-3 rounded">border-2</div>
+                                <div class="border-4 p-3 rounded">border-4</div>
+                                <div class="border-t-4 p-3 rounded">border-t-4</div>
+                                <div class="border-x-4 p-3 rounded">border-x-4</div>
+                            </div>
+                        </div>
+
+                        <!-- Border Radius -->
+                        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+                            <h3 class="text-xl font-semibold mb-4 text-blue-400">Border Radius</h3>
+                            <div class="grid grid-cols-2 gap-3 bg-slate-900 p-4 rounded-lg">
+                                <div class="bg-blue-500 p-3 rounded-none">rounded-none</div>
+                                <div class="bg-blue-500 p-3 rounded-sm">rounded-sm</div>
+                                <div class="bg-blue-500 p-3 rounded">rounded</div>
+                                <div class="bg-blue-500 p-3 rounded-md">rounded-md</div>
+                                <div class="bg-blue-500 p-3 rounded-lg">rounded-lg</div>
+                                <div class="bg-blue-500 p-3 rounded-xl">rounded-xl</div>
+                                <div class="bg-blue-500 p-3 rounded-2xl">rounded-2xl</div>
+                                <div class="bg-blue-500 p-3 rounded-full">rounded-full</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Effects Section -->
+                <section id="effects" class="mb-16 scroll-mt-20">
+                    <div class="mb-8">
+                        <h2 class="text-4xl font-bold mb-2 flex items-center gap-3">
+                            <i class="fas fa-magic text-indigo-400"></i>
+                            Effects
+                        </h2>
+                        <p class="text-gray-400">Shadows, opacity, and filters</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <!-- Shadows -->
+                        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+                            <h3 class="text-xl font-semibold mb-4 text-indigo-400">Box Shadow</h3>
+                            <div class="space-y-4 bg-slate-900 p-4 rounded-lg">
+                                <div class="shadow-sm bg-slate-700 p-3 rounded">shadow-sm</div>
+                                <div class="shadow bg-slate-700 p-3 rounded">shadow</div>
+                                <div class="shadow-md bg-slate-700 p-3 rounded">shadow-md</div>
+                                <div class="shadow-lg bg-slate-700 p-3 rounded">shadow-lg</div>
+                                <div class="shadow-xl bg-slate-700 p-3 rounded">shadow-xl</div>
+                                <div class="shadow-2xl bg-slate-700 p-3 rounded">shadow-2xl</div>
+                            </div>
+                        </div>
+
+                        <!-- Opacity -->
+                        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+                            <h3 class="text-xl font-semibold mb-4 text-indigo-400">Opacity</h3>
+                            <div class="space-y-2 bg-slate-900 p-4 rounded-lg">
+                                <div class="opacity-100 bg-indigo-500 p-2 rounded">opacity-100</div>
+                                <div class="opacity-75 bg-indigo-500 p-2 rounded">opacity-75</div>
+                                <div class="opacity-50 bg-indigo-500 p-2 rounded">opacity-50</div>
+                                <div class="opacity-25 bg-indigo-500 p-2 rounded">opacity-25</div>
+                                <div class="opacity-0 bg-indigo-500 p-2 rounded">opacity-0</div>
+                            </div>
+                        </div>
+
+                        <!-- Blur -->
+                        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+                            <h3 class="text-xl font-semibold mb-4 text-indigo-400">Blur</h3>
+                            <div class="space-y-3 bg-slate-900 p-4 rounded-lg">
+                                <div class="blur-none bg-indigo-500 p-2 rounded">blur-none</div>
+                                <div class="blur-sm bg-indigo-500 p-2 rounded">blur-sm</div>
+                                <div class="blur bg-indigo-500 p-2 rounded">blur</div>
+                                <div class="blur-md bg-indigo-500 p-2 rounded">blur-md</div>
+                                <div class="blur-lg bg-indigo-500 p-2 rounded">blur-lg</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Transforms Section -->
+                <section id="transforms" class="mb-16 scroll-mt-20">
+                    <div class="mb-8">
+                        <h2 class="text-4xl font-bold mb-2 flex items-center gap-3">
+                            <i class="fas fa-sync text-teal-400"></i>
+                            Transforms
+                        </h2>
+                        <p class="text-gray-400">Scale, rotate, translate, and skew</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Scale & Rotate -->
+                        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+                            <h3 class="text-xl font-semibold mb-4 text-teal-400">Scale & Rotate</h3>
+                            <div class="grid grid-cols-2 gap-4 bg-slate-900 p-4 rounded-lg">
+                                <div class="example-box">
+                                    <div class="bg-teal-500 p-4 rounded scale-50">scale-50</div>
+                                </div>
+                                <div class="example-box">
+                                    <div class="bg-teal-500 p-4 rounded scale-100">scale-100</div>
+                                </div>
+                                <div class="example-box">
+                                    <div class="bg-teal-500 p-4 rounded rotate-45">rotate-45</div>
+                                </div>
+                                <div class="example-box">
+                                    <div class="bg-teal-500 p-4 rounded rotate-90">rotate-90</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Translate -->
+                        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+                            <h3 class="text-xl font-semibold mb-4 text-teal-400">Translate</h3>
+                            <div class="bg-slate-900 p-4 rounded-lg h-48 relative">
+                                <div class="absolute bg-teal-500/30 p-4 rounded border-2 border-teal-500 border-dashed">
+                                    Original</div>
+                                <div class="absolute bg-teal-500 p-4 rounded translate-x-12 translate-y-12">
+                                    translate-x-12 translate-y-12</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Responsive Section -->
+                <section id="responsive" class="mb-16 scroll-mt-20">
+                    <div class="mb-8">
+                        <h2 class="text-4xl font-bold mb-2 flex items-center gap-3">
+                            <i class="fas fa-mobile-alt text-red-400"></i>
+                            Responsive Design
+                        </h2>
+                        <p class="text-gray-400">Breakpoints and responsive utilities</p>
+                    </div>
+
+                    <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+                        <h3 class="text-xl font-semibold mb-4 text-red-400">Breakpoints</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead>
+                                    <tr class="border-b border-slate-700">
+                                        <th class="py-3 px-4">Prefix</th>
+                                        <th class="py-3 px-4">Min Width</th>
+                                        <th class="py-3 px-4">CSS</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-sm">
+                                    <tr class="border-b border-slate-700/50">
+                                        <td class="py-3 px-4"><code class="text-cyan-400">sm:</code></td>
+                                        <td class="py-3 px-4">640px</td>
+                                        <td class="py-3 px-4"><code>@media (min-width: 640px)</code></td>
+                                    </tr>
+                                    <tr class="border-b border-slate-700/50">
+                                        <td class="py-3 px-4"><code class="text-cyan-400">md:</code></td>
+                                        <td class="py-3 px-4">768px</td>
+                                        <td class="py-3 px-4"><code>@media (min-width: 768px)</code></td>
+                                    </tr>
+                                    <tr class="border-b border-slate-700/50">
+                                        <td class="py-3 px-4"><code class="text-cyan-400">lg:</code></td>
+                                        <td class="py-3 px-4">1024px</td>
+                                        <td class="py-3 px-4"><code>@media (min-width: 1024px)</code></td>
+                                    </tr>
+                                    <tr class="border-b border-slate-700/50">
+                                        <td class="py-3 px-4"><code class="text-cyan-400">xl:</code></td>
+                                        <td class="py-3 px-4">1280px</td>
+                                        <td class="py-3 px-4"><code>@media (min-width: 1280px)</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-4"><code class="text-cyan-400">2xl:</code></td>
+                                        <td class="py-3 px-4">1536px</td>
+                                        <td class="py-3 px-4"><code>@media (min-width: 1536px)</code></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mt-6 code-block p-4">
+                            <button class="copy-btn px-3 py-1 bg-cyan-500 hover:bg-cyan-600 rounded text-sm"
+                                onclick="copyCode(this)">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                            <pre class="text-sm text-gray-300"><code>&lt;div class="<span class="text-yellow-300">w-full md:w-1/2 lg:w-1/3 xl:w-1/4</span>"&gt;
+  Responsive Width
+&lt;/div&gt;</code></pre>
+                        </div>
+
+                        <!-- Live Example -->
+                        <div class="mt-6 bg-slate-900 p-4 rounded-lg">
+                            <p class="text-sm text-gray-400 mb-3">Resize your browser to see the effect:</p>
+                            <div
+                                class="w-full md:w-1/2 lg:w-1/3 bg-gradient-to-r from-red-500 to-purple-500 p-4 rounded text-center font-semibold">
+                                Responsive Element
+                            </div>
+                            <p class="text-xs text-gray-500 mt-2">w-full md:w-1/2 lg:w-1/3</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- States Section -->
+                <section id="states" class="mb-16 scroll-mt-20">
+                    <div class="mb-8">
+                        <h2 class="text-4xl font-bold mb-2 flex items-center gap-3">
+                            <i class="fas fa-hand-pointer text-yellow-400"></i>
+                            States & Variants
+                        </h2>
+                        <p class="text-gray-400">Hover, focus, active, and more</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Hover & Focus -->
+                        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+                            <h3 class="text-xl font-semibold mb-4 text-yellow-400">Interactive States</h3>
+                            <div class="space-y-4 bg-slate-900 p-4 rounded-lg">
+                                <button
+                                    class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded transition">
+                                    hover:bg-blue-700
+                                </button>
+                                <button
+                                    class="w-full bg-green-500 focus:ring-4 focus:ring-green-300 text-white font-bold py-3 px-4 rounded transition">
+                                    focus:ring-4
+                                </button>
+                                <button
+                                    class="w-full bg-purple-500 active:bg-purple-900 text-white font-bold py-3 px-4 rounded transition">
+                                    active:bg-purple-900
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Group Hover -->
+                        <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+                            <h3 class="text-xl font-semibold mb-4 text-yellow-400">Group Hover</h3>
+                            <div class="bg-slate-900 p-4 rounded-lg">
+                                <div
+                                    class="group bg-slate-700 p-6 rounded-lg hover:bg-slate-600 transition cursor-pointer">
+                                    <h4 class="font-bold mb-2 group-hover:text-yellow-400 transition">Hover Me</h4>
+                                    <p class="text-sm text-gray-400 group-hover:text-white transition">
+                                        This text changes when parent is hovered
+                                    </p>
+                                </div>
+                                <div class="mt-4 code-block p-3">
+                                    <pre class="text-xs text-gray-300"><code>&lt;div class="<span class="text-yellow-300">group</span>"&gt;
+  &lt;p class="<span class="text-yellow-300">group-hover:text-yellow-400</span>"&gt;
+&lt;/div&gt;</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Practical Examples Section -->
+                <section id="examples" class="mb-16 scroll-mt-20">
+                    <div class="mb-8">
+                        <h2 class="text-4xl font-bold mb-2 flex items-center gap-3">
+                            <i class="fas fa-code text-green-400"></i>
+                            Practical Examples
+                        </h2>
+                        <p class="text-gray-400">Real-world component examples</p>
+                    </div>
+
+                    <!-- Card Example -->
+                    <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700 mb-6">
+                        <h3 class="text-xl font-semibold mb-4 text-green-400">Card Component</h3>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <!-- Preview -->
+                            <div>
+                                <p class="text-sm text-gray-400 mb-3">Preview:</p>
+                                <div
+                                    class="max-w-sm bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300">
+                                    <div class="h-48 bg-gradient-to-r from-purple-500 to-pink-500"></div>
+                                    <div class="p-6">
+                                        <span
+                                            class="inline-block bg-blue-500 text-white text-xs px-2 py-1 rounded-full uppercase font-semibold">New</span>
+                                        <h2 class="mt-2 text-2xl font-bold text-gray-800">Card Title</h2>
+                                        <p class="mt-2 text-gray-600">This is a beautiful card component built with
+                                            Tailwind CSS.</p>
+                                        <button
+                                            class="mt-4 w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition">
+                                            Read More
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Code -->
+                            <div>
+                                <p class="text-sm text-gray-400 mb-3">Code:</p>
+                                <div class="code-block p-4 max-h-96 overflow-y-auto">
+                                    <button class="copy-btn px-3 py-1 bg-cyan-500 hover:bg-cyan-600 rounded text-sm"
+                                        onclick="copyCode(this)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                    <pre class="text-xs text-gray-300"><code>&lt;div class="max-w-sm bg-white rounded-lg 
+     shadow-lg overflow-hidden 
+     hover:shadow-2xl transition-shadow"&gt;
+  &lt;div class="h-48 bg-gradient-to-r 
+       from-purple-500 to-pink-500"&gt;&lt;/div&gt;
+  &lt;div class="p-6"&gt;
+    &lt;span class="inline-block bg-blue-500 
+          text-white text-xs px-2 py-1 
+          rounded-full uppercase 
+          font-semibold"&gt;New&lt;/span&gt;
+    &lt;h2 class="mt-2 text-2xl font-bold 
+        text-gray-800"&gt;Card Title&lt;/h2&gt;
+    &lt;p class="mt-2 text-gray-600"&gt;
+      Description text here
+    &lt;/p&gt;
+    &lt;button class="mt-4 w-full bg-blue-500 
+            hover:bg-blue-700 text-white 
+            font-bold py-2 px-4 rounded"&gt;
+      Read More
+    &lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Button Examples -->
+                    <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700 mb-6">
+                        <h3 class="text-xl font-semibold mb-4 text-green-400">Button Styles</h3>
+                        <div class="flex flex-wrap gap-4 bg-slate-900 p-6 rounded-lg">
+                            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                Primary
+                            </button>
+                            <button
+                                class="bg-transparent hover:bg-blue-500 text-blue-500 hover:text-white border border-blue-500 font-bold py-2 px-4 rounded">
+                                Outline
+                            </button>
+                            <button
+                                class="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-2 px-4 rounded-full">
+                                Gradient
+                            </button>
+                            <button
+                                class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center">
+                                <i class="fas fa-download mr-2"></i>
+                                Download
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Form Example -->
+                    <div class="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+                        <h3 class="text-xl font-semibold mb-4 text-green-400">Form Elements</h3>
+                        <div class="bg-slate-900 p-6 rounded-lg">
+                            <form class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Email</label>
+                                    <input type="email" placeholder="you@example.com"
+                                        class="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Message</label>
+                                    <textarea rows="4" placeholder="Your message..."
+                                        class="w-full px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"></textarea>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox"
+                                        class="w-4 h-4 text-cyan-500 bg-slate-800 border-slate-700 rounded focus:ring-cyan-500">
+                                    <label class="ml-2 text-sm">I agree to the terms and conditions</label>
+                                </div>
+                                <button type="submit"
+                                    class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-4 rounded-lg transition">
+                                    Submit
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quick Reference Section -->
+                <section id="quick-reference" class="mb-16 scroll-mt-20">
+                    <div class="mb-8">
+                        <h2 class="text-4xl font-bold mb-2 flex items-center gap-3">
+                            <i class="fas fa-bolt text-yellow-400"></i>
+                            Quick Reference
+                        </h2>
+                        <p class="text-gray-400">Most commonly used classes</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
+                            <h4 class="font-semibold mb-2 text-cyan-400">Centering</h4>
+                            <div class="space-y-1 text-sm font-mono">
+                                <div class="class-badge-sm">flex items-center justify-center</div>
+                                <div class="class-badge-sm">mx-auto</div>
+                                <div class="class-badge-sm">grid place-items-center</div>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
+                            <h4 class="font-semibold mb-2 text-purple-400">Full Height</h4>
+                            <div class="space-y-1 text-sm font-mono">
+                                <div class="class-badge-sm">h-screen</div>
+                                <div class="class-badge-sm">min-h-screen</div>
+                                <div class="class-badge-sm">h-full</div>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
+                            <h4 class="font-semibold mb-2 text-green-400">Responsive Grid</h4>
+                            <div class="space-y-1 text-sm font-mono">
+                                <div class="class-badge-sm">grid-cols-1 md:grid-cols-2</div>
+                                <div class="class-badge-sm">lg:grid-cols-3</div>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
+                            <h4 class="font-semibold mb-2 text-orange-400">Hide/Show</h4>
+                            <div class="space-y-1 text-sm font-mono">
+                                <div class="class-badge-sm">hidden md:block</div>
+                                <div class="class-badge-sm">block md:hidden</div>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
+                            <h4 class="font-semibold mb-2 text-pink-400">Truncate Text</h4>
+                            <div class="space-y-1 text-sm font-mono">
+                                <div class="class-badge-sm">truncate</div>
+                                <div class="class-badge-sm">line-clamp-3</div>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
+                            <h4 class="font-semibold mb-2 text-blue-400">Aspect Ratio</h4>
+                            <div class="space-y-1 text-sm font-mono">
+                                <div class="class-badge-sm">aspect-square</div>
+                                <div class="class-badge-sm">aspect-video</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Footer -->
+            <footer class="mt-20 pt-8 border-t border-slate-700 text-center text-gray-400">
+                <p class="mb-4">
+                    Made with <i class="fas fa-heart text-red-500"></i> for Tailwind CSS developers
+                </p>
+                <div class="flex justify-center gap-6 mb-4">
+                    <a href="https://tailwindcss.com" target="_blank" class="hover:text-cyan-400 transition">
+                        <i class="fas fa-book"></i> Official Docs
+                    </a>
+                    <a href="https://github.com/tailwindlabs/tailwindcss" target="_blank"
+                        class="hover:text-cyan-400 transition">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                </div>
+                <p class="text-sm">© 2024 Tailwind CSS Cheatsheet</p>
+            </footer>
         </div>
-      </div>
+    </main>
 
-      <div style="margin-top:14px">
-        <p class="section-desc" style="margin-bottom:10px">Common spacing utilities:</p>
-        <div class="chips">
-          <span class="chip" onclick="copy('p-4')">p-4</span>
-          <span class="chip" onclick="copy('px-6')">px-6</span>
-          <span class="chip" onclick="copy('py-2')">py-2</span>
-          <span class="chip" onclick="copy('pt-8')">pt-8</span>
-          <span class="chip" onclick="copy('m-auto')">m-auto</span>
-          <span class="chip" onclick="copy('mx-auto')">mx-auto</span>
-          <span class="chip" onclick="copy('mt-4')">mt-4</span>
-          <span class="chip" onclick="copy('mb-8')">mb-8</span>
-          <span class="chip" onclick="copy('gap-4')">gap-4</span>
-          <span class="chip" onclick="copy('gap-x-6')">gap-x-6</span>
-          <span class="chip" onclick="copy('gap-y-3')">gap-y-3</span>
-          <span class="chip" onclick="copy('space-x-4')">space-x-4</span>
-          <span class="chip" onclick="copy('space-y-2')">space-y-2</span>
-        </div>
-      </div>
-    </section>
+    <!-- Scroll to Top Button -->
+    <button id="scrollToTop"
+        class="fixed bottom-20 right-4 bg-cyan-500 hover:bg-cyan-600 text-white p-3 rounded-full shadow-lg hidden transition z-40">
+        <i class="fas fa-arrow-up"></i>
+    </button>
 
-    <!-- BREAKPOINTS -->
-    <section class="section" id="breakpoints">
-      <div class="section-header"><div class="section-dot"></div><h2>Breakpoints</h2></div>
-      <p class="section-desc">Tailwind is mobile-first. Prefix any class with a breakpoint to apply it at that width and above.</p>
+    <style>
+        .class-badge {
+            background-color: #0f172a;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            color: #22d3ee;
+            transition: background-color 150ms ease-in-out;
+            cursor: pointer;
+        }
 
-      <div class="card" style="margin-bottom:14px">
-        <div class="bp-row"><span class="bp-name">sm</span><span class="bp-px">≥ 640px</span><div class="bp-bar-wrap"><div class="bp-bar" style="width:25%;background:var(--green)"></div></div></div>
-        <div class="bp-row"><span class="bp-name">md</span><span class="bp-px">≥ 768px</span><div class="bp-bar-wrap"><div class="bp-bar" style="width:35%;background:var(--cyan)"></div></div></div>
-        <div class="bp-row"><span class="bp-name">lg</span><span class="bp-px">≥ 1024px</span><div class="bp-bar-wrap"><div class="bp-bar" style="width:50%;background:var(--violet)"></div></div></div>
-        <div class="bp-row"><span class="bp-name">xl</span><span class="bp-px">≥ 1280px</span><div class="bp-bar-wrap"><div class="bp-bar" style="width:65%;background:var(--orange)"></div></div></div>
-        <div class="bp-row"><span class="bp-name">2xl</span><span class="bp-px">≥ 1536px</span><div class="bp-bar-wrap"><div class="bp-bar" style="width:80%;background:var(--red)"></div></div></div>
-      </div>
+        .class-badge:hover {
+            background-color: #334155;
+        }
 
-      <div class="code-block"><span class="cmt">&lt;!-- stacks on mobile, 3 columns on lg+ --&gt;</span>
-<span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"grid grid-cols-1 lg:grid-cols-3 gap-6"</span><span class="tag">&gt;</span>
-<span class="tag">&lt;/div&gt;</span>
+        .class-badge-sm {
+            background-color: #0f172a;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            color: #22d3ee;
+        }
+    </style>
 
-<span class="cmt">&lt;!-- hidden on mobile, visible on md+ --&gt;</span>
-<span class="tag">&lt;nav</span> <span class="attr">class=</span><span class="val">"hidden md:flex"</span><span class="tag">&gt;</span><span class="tag">&lt;/nav&gt;</span>
+    <script>
+        // Navigation Data
+        const sections = [
+            { id: 'layout', name: 'Layout', icon: 'fa-th' },
+            { id: 'flexbox', name: 'Flexbox', icon: 'fa-grip-horizontal' },
+            { id: 'grid', name: 'Grid', icon: 'fa-th-large' },
+            { id: 'spacing', name: 'Spacing', icon: 'fa-arrows-alt' },
+            { id: 'typography', name: 'Typography', icon: 'fa-font' },
+            { id: 'colors', name: 'Colors', icon: 'fa-palette' },
+            { id: 'borders', name: 'Borders', icon: 'fa-square' },
+            { id: 'effects', name: 'Effects', icon: 'fa-magic' },
+            { id: 'transforms', name: 'Transforms', icon: 'fa-sync' },
+            { id: 'responsive', name: 'Responsive', icon: 'fa-mobile-alt' },
+            { id: 'states', name: 'States', icon: 'fa-hand-pointer' },
+            { id: 'examples', name: 'Examples', icon: 'fa-code' },
+            { id: 'quick-reference', name: 'Quick Ref', icon: 'fa-bolt' }
+        ];
 
-<span class="cmt">&lt;!-- smaller text on mobile, larger on xl --&gt;</span>
-<span class="tag">&lt;h1</span> <span class="attr">class=</span><span class="val">"text-2xl xl:text-5xl"</span><span class="tag">&gt;</span><span class="tag">&lt;/h1&gt;</span></div>
-    </section>
+        // Generate Sidebar Navigation
+        function generateNav(navElement) {
+            navElement.innerHTML = sections.map(section => `
+                <a href="#${section.id}" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-slate-800 transition nav-link" data-section="${section.id}">
+                    <i class="fas ${section.icon} text-sm"></i>
+                    <span>${section.name}</span>
+                </a>
+            `).join('');
+        }
 
-    <!-- COLORS -->
-    <section class="section" id="colors">
-      <div class="section-header"><div class="section-dot"></div><h2>Colors</h2></div>
-      <p class="section-desc">Pattern: <code class="cls">{property}-{color}-{shade}</code>. Shades run 50 → 950. Used for text, bg, border, ring, shadow, etc.</p>
+        generateNav(document.getElementById('sidebarNav'));
+        generateNav(document.getElementById('mobileSidebarNav'));
 
-      <div class="chips" style="margin-bottom:16px">
-        <span class="chip" onclick="copy('text-slate-700')">text-slate-700</span>
-        <span class="chip" onclick="copy('bg-blue-500')">bg-blue-500</span>
-        <span class="chip" onclick="copy('border-red-300')">border-red-300</span>
-        <span class="chip" onclick="copy('ring-violet-500')">ring-violet-500</span>
-        <span class="chip" onclick="copy('bg-opacity-50')">bg-opacity-50</span>
-        <span class="chip" onclick="copy('text-white')">text-white</span>
-        <span class="chip" onclick="copy('bg-transparent')">bg-transparent</span>
-        <span class="chip" onclick="copy('text-current')">text-current</span>
-      </div>
+        // Active Navigation
+        function updateActiveNav() {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-link');
 
-      <div class="card">
-        <div class="card-label">slate palette (same pattern for all colors)</div>
-        <div class="swatch-grid">
-          <div><div class="swatch" style="background:#f8fafc"></div><div class="swatch-label">50</div></div>
-          <div><div class="swatch" style="background:#f1f5f9"></div><div class="swatch-label">100</div></div>
-          <div><div class="swatch" style="background:#e2e8f0"></div><div class="swatch-label">200</div></div>
-          <div><div class="swatch" style="background:#cbd5e1"></div><div class="swatch-label">300</div></div>
-          <div><div class="swatch" style="background:#94a3b8"></div><div class="swatch-label">400</div></div>
-          <div><div class="swatch" style="background:#64748b"></div><div class="swatch-label">500</div></div>
-          <div><div class="swatch" style="background:#475569"></div><div class="swatch-label">600</div></div>
-          <div><div class="swatch" style="background:#334155"></div><div class="swatch-label">700</div></div>
-          <div><div class="swatch" style="background:#1e293b"></div><div class="swatch-label">800</div></div>
-          <div><div class="swatch" style="background:#0f172a"></div><div class="swatch-label">900</div></div>
-          <div><div class="swatch" style="background:#020617"></div><div class="swatch-label">950</div></div>
-        </div>
-        <p style="font-size:11px;color:var(--muted);margin-top:10px">Colors: <code class="mono" style="font-size:11px">slate · gray · zinc · neutral · stone · red · orange · amber · yellow · lime · green · emerald · teal · cyan · sky · blue · indigo · violet · purple · fuchsia · pink · rose</code></p>
-      </div>
-    </section>
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
 
-    <div class="divider"></div>
+            navLinks.forEach(link => {
+                link.classList.remove('bg-slate-800', 'text-cyan-400');
+                if (link.getAttribute('data-section') === current) {
+                    link.classList.add('bg-slate-800', 'text-cyan-400');
+                }
+            });
+        }
 
-    <!-- DISPLAY -->
-    <section class="section" id="display">
-      <div class="section-header"><div class="section-dot"></div><h2>Display</h2></div>
+        window.addEventListener('scroll', updateActiveNav);
 
-      <div class="chips">
-        <span class="chip" onclick="copy('block')">block</span>
-        <span class="chip" onclick="copy('inline-block')">inline-block</span>
-        <span class="chip" onclick="copy('inline')">inline</span>
-        <span class="chip" onclick="copy('flex')">flex</span>
-        <span class="chip" onclick="copy('inline-flex')">inline-flex</span>
-        <span class="chip" onclick="copy('grid')">grid</span>
-        <span class="chip" onclick="copy('inline-grid')">inline-grid</span>
-        <span class="chip" onclick="copy('hidden')">hidden</span>
-        <span class="chip" onclick="copy('contents')">contents</span>
-        <span class="chip" onclick="copy('table')">table</span>
-      </div>
-    </section>
+        // Search Functionality
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const content = document.getElementById('content');
 
-    <!-- FLEXBOX -->
-    <section class="section" id="flexbox">
-      <div class="section-header"><div class="section-dot"></div><h2>Flexbox</h2></div>
-      <p class="section-desc">The most common layout system you'll use daily.</p>
+            if (searchTerm.length < 2) {
+                // Clear highlights
+                content.innerHTML = content.innerHTML.replace(/<mark class="search-highlight">(.*?)<\/mark>/g, '$1');
+                return;
+            }
 
-      <div class="grid-2" style="margin-bottom:14px">
-        <div class="card">
-          <div class="card-label">Direction</div>
-          <div class="chips"><span class="chip" onclick="copy('flex-row')">flex-row</span><span class="chip" onclick="copy('flex-col')">flex-col</span><span class="chip" onclick="copy('flex-row-reverse')">flex-row-reverse</span><span class="chip" onclick="copy('flex-col-reverse')">flex-col-reverse</span></div>
-        </div>
-        <div class="card">
-          <div class="card-label">Wrap</div>
-          <div class="chips"><span class="chip" onclick="copy('flex-wrap')">flex-wrap</span><span class="chip" onclick="copy('flex-nowrap')">flex-nowrap</span><span class="chip" onclick="copy('flex-wrap-reverse')">flex-wrap-reverse</span></div>
-        </div>
-        <div class="card">
-          <div class="card-label">Justify content (main axis)</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('justify-start')">justify-start</span>
-            <span class="chip" onclick="copy('justify-center')">justify-center</span>
-            <span class="chip" onclick="copy('justify-end')">justify-end</span>
-            <span class="chip" onclick="copy('justify-between')">justify-between</span>
-            <span class="chip" onclick="copy('justify-around')">justify-around</span>
-            <span class="chip" onclick="copy('justify-evenly')">justify-evenly</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Align items (cross axis)</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('items-start')">items-start</span>
-            <span class="chip" onclick="copy('items-center')">items-center</span>
-            <span class="chip" onclick="copy('items-end')">items-end</span>
-            <span class="chip" onclick="copy('items-stretch')">items-stretch</span>
-            <span class="chip" onclick="copy('items-baseline')">items-baseline</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Flex grow / shrink</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('flex-1')">flex-1</span>
-            <span class="chip" onclick="copy('flex-auto')">flex-auto</span>
-            <span class="chip" onclick="copy('flex-none')">flex-none</span>
-            <span class="chip" onclick="copy('grow')">grow</span>
-            <span class="chip" onclick="copy('shrink-0')">shrink-0</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Self align</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('self-auto')">self-auto</span>
-            <span class="chip" onclick="copy('self-start')">self-start</span>
-            <span class="chip" onclick="copy('self-center')">self-center</span>
-            <span class="chip" onclick="copy('self-end')">self-end</span>
-            <span class="chip" onclick="copy('self-stretch')">self-stretch</span>
-          </div>
-        </div>
-      </div>
+            // Simple search implementation
+            const sections = content.querySelectorAll('section');
+            sections.forEach(section => {
+                const text = section.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    section.style.display = 'block';
+                } else {
+                    section.style.display = 'none';
+                }
+            });
+        });
 
-      <div class="card">
-        <div class="card-label">Common pattern — centered card</div>
-        <div class="code-block"><span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"flex items-center justify-center min-h-screen"</span><span class="tag">&gt;</span>
-  <span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"flex flex-col gap-4 p-8 rounded-xl bg-white"</span><span class="tag">&gt;</span>
-    <span class="cmt">&lt;!-- card content --&gt;</span>
-  <span class="tag">&lt;/div&gt;</span>
-<span class="tag">&lt;/div&gt;</span></div>
-      </div>
-    </section>
+        // Copy Code Function
+        function copyCode(button) {
+            const codeBlock = button.parentElement.querySelector('code');
+            const text = codeBlock.textContent;
 
-    <!-- GRID -->
-    <section class="section" id="grid">
-      <div class="section-header"><div class="section-dot"></div><h2>Grid</h2></div>
+            navigator.clipboard.writeText(text).then(() => {
+                const originalHTML = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                button.classList.add('bg-green-500');
 
-      <div class="grid-2" style="margin-bottom:14px">
-        <div class="card">
-          <div class="card-label">Columns</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('grid-cols-1')">grid-cols-1</span>
-            <span class="chip" onclick="copy('grid-cols-2')">grid-cols-2</span>
-            <span class="chip" onclick="copy('grid-cols-3')">grid-cols-3</span>
-            <span class="chip" onclick="copy('grid-cols-4')">grid-cols-4</span>
-            <span class="chip" onclick="copy('grid-cols-6')">grid-cols-6</span>
-            <span class="chip" onclick="copy('grid-cols-12')">grid-cols-12</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Column span</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('col-span-1')">col-span-1</span>
-            <span class="chip" onclick="copy('col-span-2')">col-span-2</span>
-            <span class="chip" onclick="copy('col-span-full')">col-span-full</span>
-            <span class="chip" onclick="copy('col-start-2')">col-start-2</span>
-            <span class="chip" onclick="copy('col-end-4')">col-end-4</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Rows</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('grid-rows-2')">grid-rows-2</span>
-            <span class="chip" onclick="copy('row-span-2')">row-span-2</span>
-            <span class="chip" onclick="copy('row-start-1')">row-start-1</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Auto flow</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('grid-flow-row')">grid-flow-row</span>
-            <span class="chip" onclick="copy('grid-flow-col')">grid-flow-col</span>
-            <span class="chip" onclick="copy('grid-flow-dense')">grid-flow-dense</span>
-          </div>
-        </div>
-      </div>
+                setTimeout(() => {
+                    button.innerHTML = originalHTML;
+                    button.classList.remove('bg-green-500');
+                }, 2000);
+            });
+        }
 
-      <div class="card">
-        <div class="card-label">Responsive auto-fill grid pattern</div>
-        <div class="code-block"><span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"</span><span class="tag">&gt;</span>
-  <span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"col-span-1"</span><span class="tag">&gt;</span>Card<span class="tag">&lt;/div&gt;</span>
-<span class="tag">&lt;/div&gt;</span>
+        // Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileSidebar = document.getElementById('mobileSidebar');
+        const closeMobileMenu = document.getElementById('closeMobileMenu');
+        const mobileOverlay = document.getElementById('mobileOverlay');
 
-<span class="cmt">&lt;!-- fluid grid with min-width using arbitrary value --&gt;</span>
-<span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"grid [grid-template-columns:repeat(auto-fill,minmax(200px,1fr))] gap-4"</span><span class="tag">&gt;</span>
-<span class="tag">&lt;/div&gt;</span></div>
-      </div>
-    </section>
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileSidebar.classList.remove('hidden');
+        });
 
-    <!-- POSITIONING -->
-    <section class="section" id="positioning">
-      <div class="section-header"><div class="section-dot"></div><h2>Positioning</h2></div>
+        closeMobileMenu.addEventListener('click', () => {
+            mobileSidebar.classList.add('hidden');
+        });
 
-      <div class="grid-2" style="margin-bottom:14px">
-        <div class="card">
-          <div class="card-label">Position</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('static')">static</span>
-            <span class="chip" onclick="copy('relative')">relative</span>
-            <span class="chip" onclick="copy('absolute')">absolute</span>
-            <span class="chip" onclick="copy('fixed')">fixed</span>
-            <span class="chip" onclick="copy('sticky')">sticky</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Inset / TRBL</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('inset-0')">inset-0</span>
-            <span class="chip" onclick="copy('inset-x-0')">inset-x-0</span>
-            <span class="chip" onclick="copy('top-0')">top-0</span>
-            <span class="chip" onclick="copy('right-0')">right-0</span>
-            <span class="chip" onclick="copy('bottom-0')">bottom-0</span>
-            <span class="chip" onclick="copy('left-0')">left-0</span>
-            <span class="chip" onclick="copy('top-1/2')">top-1/2</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Z-Index</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('z-0')">z-0</span>
-            <span class="chip" onclick="copy('z-10')">z-10</span>
-            <span class="chip" onclick="copy('z-20')">z-20</span>
-            <span class="chip" onclick="copy('z-30')">z-30</span>
-            <span class="chip" onclick="copy('z-40')">z-40</span>
-            <span class="chip" onclick="copy('z-50')">z-50</span>
-            <span class="chip" onclick="copy('z-auto')">z-auto</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Overflow</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('overflow-hidden')">overflow-hidden</span>
-            <span class="chip" onclick="copy('overflow-auto')">overflow-auto</span>
-            <span class="chip" onclick="copy('overflow-scroll')">overflow-scroll</span>
-            <span class="chip" onclick="copy('overflow-x-auto')">overflow-x-auto</span>
-            <span class="chip" onclick="copy('overflow-y-hidden')">overflow-y-hidden</span>
-            <span class="chip" onclick="copy('truncate')">truncate</span>
-          </div>
-        </div>
-      </div>
+        mobileOverlay.addEventListener('click', () => {
+            mobileSidebar.classList.add('hidden');
+        });
 
-      <div class="card">
-        <div class="card-label">Classic centering pattern</div>
-        <div class="code-block"><span class="cmt">&lt;!-- absolute center inside a relative parent --&gt;</span>
-<span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"relative h-64"</span><span class="tag">&gt;</span>
-  <span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"</span><span class="tag">&gt;</span>
-    Centered
-  <span class="tag">&lt;/div&gt;</span>
-<span class="tag">&lt;/div&gt;</span></div>
-      </div>
-    </section>
+        // Close mobile menu on link click
+        document.querySelectorAll('#mobileSidebarNav a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileSidebar.classList.add('hidden');
+            });
+        });
 
-    <!-- SIZING -->
-    <section class="section" id="sizing">
-      <div class="section-header"><div class="section-dot"></div><h2>Sizing</h2></div>
+        // Scroll to Top
+        const scrollToTopBtn = document.getElementById('scrollToTop');
 
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-label">Width</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('w-full')">w-full</span>
-            <span class="chip" onclick="copy('w-screen')">w-screen</span>
-            <span class="chip" onclick="copy('w-auto')">w-auto</span>
-            <span class="chip" onclick="copy('w-fit')">w-fit</span>
-            <span class="chip" onclick="copy('w-max')">w-max</span>
-            <span class="chip" onclick="copy('w-min')">w-min</span>
-            <span class="chip" onclick="copy('w-1/2')">w-1/2</span>
-            <span class="chip" onclick="copy('w-1/3')">w-1/3</span>
-            <span class="chip" onclick="copy('w-2/3')">w-2/3</span>
-            <span class="chip" onclick="copy('w-1/4')">w-1/4</span>
-            <span class="chip" onclick="copy('w-64')">w-64</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Height</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('h-full')">h-full</span>
-            <span class="chip" onclick="copy('h-screen')">h-screen</span>
-            <span class="chip" onclick="copy('h-svh')">h-svh</span>
-            <span class="chip" onclick="copy('h-dvh')">h-dvh</span>
-            <span class="chip" onclick="copy('h-auto')">h-auto</span>
-            <span class="chip" onclick="copy('h-fit')">h-fit</span>
-            <span class="chip" onclick="copy('min-h-screen')">min-h-screen</span>
-            <span class="chip" onclick="copy('max-h-96')">max-h-96</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Max / Min width</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('max-w-sm')">max-w-sm</span>
-            <span class="chip" onclick="copy('max-w-md')">max-w-md</span>
-            <span class="chip" onclick="copy('max-w-lg')">max-w-lg</span>
-            <span class="chip" onclick="copy('max-w-xl')">max-w-xl</span>
-            <span class="chip" onclick="copy('max-w-2xl')">max-w-2xl</span>
-            <span class="chip" onclick="copy('max-w-screen-lg')">max-w-screen-lg</span>
-            <span class="chip" onclick="copy('max-w-prose')">max-w-prose</span>
-            <span class="chip" onclick="copy('min-w-0')">min-w-0</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Aspect ratio</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('aspect-square')">aspect-square</span>
-            <span class="chip" onclick="copy('aspect-video')">aspect-video</span>
-            <span class="chip" onclick="copy('aspect-auto')">aspect-auto</span>
-          </div>
-        </div>
-      </div>
-    </section>
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollToTopBtn.classList.remove('hidden');
+            } else {
+                scrollToTopBtn.classList.add('hidden');
+            }
+        });
 
-    <div class="divider"></div>
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
 
-    <!-- TYPOGRAPHY -->
-    <section class="section" id="typography">
-      <div class="section-header"><div class="section-dot"></div><h2>Typography</h2></div>
+        // Theme Toggle (Optional)
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            // You can implement dark/light mode toggle here
+            alert('Theme toggle feature - Coming soon!');
+        });
 
-      <table class="util-table" style="margin-bottom:14px">
-        <thead><tr><th>Class</th><th>CSS</th><th>Note</th></tr></thead>
-        <tbody>
-          <tr><td><span class="cls" onclick="copy('text-xs')" style="cursor:pointer">text-xs</span></td><td><span class="css-val">0.75rem / 1rem</span></td><td style="color:var(--muted);font-size:12px">12px</td></tr>
-          <tr><td><span class="cls" onclick="copy('text-sm')" style="cursor:pointer">text-sm</span></td><td><span class="css-val">0.875rem / 1.25rem</span></td><td style="color:var(--muted);font-size:12px">14px</td></tr>
-          <tr><td><span class="cls" onclick="copy('text-base')" style="cursor:pointer">text-base</span></td><td><span class="css-val">1rem / 1.5rem</span></td><td style="color:var(--muted);font-size:12px">16px</td></tr>
-          <tr><td><span class="cls" onclick="copy('text-lg')" style="cursor:pointer">text-lg</span></td><td><span class="css-val">1.125rem / 1.75rem</span></td><td style="color:var(--muted);font-size:12px">18px</td></tr>
-          <tr><td><span class="cls" onclick="copy('text-xl')" style="cursor:pointer">text-xl</span></td><td><span class="css-val">1.25rem / 1.75rem</span></td><td style="color:var(--muted);font-size:12px">20px</td></tr>
-          <tr><td><span class="cls" onclick="copy('text-2xl')" style="cursor:pointer">text-2xl</span></td><td><span class="css-val">1.5rem / 2rem</span></td><td style="color:var(--muted);font-size:12px">24px</td></tr>
-          <tr><td><span class="cls" onclick="copy('text-3xl')" style="cursor:pointer">text-3xl</span></td><td><span class="css-val">1.875rem / 2.25rem</span></td><td style="color:var(--muted);font-size:12px">30px</td></tr>
-          <tr><td><span class="cls" onclick="copy('text-4xl')" style="cursor:pointer">text-4xl</span></td><td><span class="css-val">2.25rem / 2.5rem</span></td><td style="color:var(--muted);font-size:12px">36px</td></tr>
-          <tr><td><span class="cls" onclick="copy('text-5xl')" style="cursor:pointer">text-5xl</span></td><td><span class="css-val">3rem / 1</span></td><td style="color:var(--muted);font-size:12px">48px</td></tr>
-          <tr><td><span class="cls" onclick="copy('text-6xl')" style="cursor:pointer">text-6xl</span></td><td><span class="css-val">3.75rem / 1</span></td><td style="color:var(--muted);font-size:12px">60px</td></tr>
-        </tbody>
-      </table>
+        // Add copy functionality to all class badges
+        document.querySelectorAll('.class-badge').forEach(badge => {
+            badge.addEventListener('click', function () {
+                const text = this.textContent;
+                navigator.clipboard.writeText(text).then(() => {
+                    const originalBg = this.className;
+                    this.classList.add('bg-green-600');
+                    setTimeout(() => {
+                        this.className = originalBg;
+                    }, 1000);
+                });
+            });
+        });
 
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-label">Font weight</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('font-thin')">font-thin</span>
-            <span class="chip" onclick="copy('font-light')">font-light</span>
-            <span class="chip" onclick="copy('font-normal')">font-normal</span>
-            <span class="chip" onclick="copy('font-medium')">font-medium</span>
-            <span class="chip" onclick="copy('font-semibold')">font-semibold</span>
-            <span class="chip" onclick="copy('font-bold')">font-bold</span>
-            <span class="chip" onclick="copy('font-extrabold')">font-extrabold</span>
-            <span class="chip" onclick="copy('font-black')">font-black</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Text alignment</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('text-left')">text-left</span>
-            <span class="chip" onclick="copy('text-center')">text-center</span>
-            <span class="chip" onclick="copy('text-right')">text-right</span>
-            <span class="chip" onclick="copy('text-justify')">text-justify</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Line height</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('leading-none')">leading-none</span>
-            <span class="chip" onclick="copy('leading-tight')">leading-tight</span>
-            <span class="chip" onclick="copy('leading-snug')">leading-snug</span>
-            <span class="chip" onclick="copy('leading-normal')">leading-normal</span>
-            <span class="chip" onclick="copy('leading-relaxed')">leading-relaxed</span>
-            <span class="chip" onclick="copy('leading-loose')">leading-loose</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Letter spacing</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('tracking-tighter')">tracking-tighter</span>
-            <span class="chip" onclick="copy('tracking-tight')">tracking-tight</span>
-            <span class="chip" onclick="copy('tracking-normal')">tracking-normal</span>
-            <span class="chip" onclick="copy('tracking-wide')">tracking-wide</span>
-            <span class="chip" onclick="copy('tracking-wider')">tracking-wider</span>
-            <span class="chip" onclick="copy('tracking-widest')">tracking-widest</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Text decoration / style</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('underline')">underline</span>
-            <span class="chip" onclick="copy('line-through')">line-through</span>
-            <span class="chip" onclick="copy('no-underline')">no-underline</span>
-            <span class="chip" onclick="copy('italic')">italic</span>
-            <span class="chip" onclick="copy('not-italic')">not-italic</span>
-            <span class="chip" onclick="copy('uppercase')">uppercase</span>
-            <span class="chip" onclick="copy('lowercase')">lowercase</span>
-            <span class="chip" onclick="copy('capitalize')">capitalize</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Text overflow</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('truncate')">truncate</span>
-            <span class="chip" onclick="copy('text-ellipsis')">text-ellipsis</span>
-            <span class="chip" onclick="copy('text-clip')">text-clip</span>
-            <span class="chip" onclick="copy('whitespace-nowrap')">whitespace-nowrap</span>
-            <span class="chip" onclick="copy('whitespace-pre')">whitespace-pre</span>
-            <span class="chip" onclick="copy('break-all')">break-all</span>
-            <span class="chip" onclick="copy('break-words')">break-words</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <div class="divider"></div>
-
-    <!-- BACKGROUND -->
-    <section class="section" id="background">
-      <div class="section-header"><div class="section-dot"></div><h2>Background</h2></div>
-
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-label">Gradient</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('bg-gradient-to-r')">bg-gradient-to-r</span>
-            <span class="chip" onclick="copy('bg-gradient-to-br')">bg-gradient-to-br</span>
-            <span class="chip" onclick="copy('from-blue-500')">from-blue-500</span>
-            <span class="chip" onclick="copy('via-purple-500')">via-purple-500</span>
-            <span class="chip" onclick="copy('to-pink-500')">to-pink-500</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Image / size / position</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('bg-cover')">bg-cover</span>
-            <span class="chip" onclick="copy('bg-contain')">bg-contain</span>
-            <span class="chip" onclick="copy('bg-center')">bg-center</span>
-            <span class="chip" onclick="copy('bg-top')">bg-top</span>
-            <span class="chip" onclick="copy('bg-no-repeat')">bg-no-repeat</span>
-            <span class="chip" onclick="copy('bg-fixed')">bg-fixed</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="code-block" style="margin-top:10px"><span class="cmt">&lt;!-- gradient button --&gt;</span>
-<span class="tag">&lt;button</span> <span class="attr">class=</span><span class="val">"bg-gradient-to-r from-cyan-500 to-blue-600 px-6 py-2 rounded-lg font-semibold text-white"</span><span class="tag">&gt;</span>
-  Click me
-<span class="tag">&lt;/button&gt;</span></div>
-    </section>
-
-    <!-- BORDERS -->
-    <section class="section" id="borders">
-      <div class="section-header"><div class="section-dot"></div><h2>Borders & Radius</h2></div>
-
-      <div class="grid-3">
-        <div class="card">
-          <div class="card-label">Width</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('border')">border</span>
-            <span class="chip" onclick="copy('border-0')">border-0</span>
-            <span class="chip" onclick="copy('border-2')">border-2</span>
-            <span class="chip" onclick="copy('border-4')">border-4</span>
-            <span class="chip" onclick="copy('border-t')">border-t</span>
-            <span class="chip" onclick="copy('border-b')">border-b</span>
-            <span class="chip" onclick="copy('border-x')">border-x</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Radius</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('rounded-none')">rounded-none</span>
-            <span class="chip" onclick="copy('rounded-sm')">rounded-sm</span>
-            <span class="chip" onclick="copy('rounded')">rounded</span>
-            <span class="chip" onclick="copy('rounded-md')">rounded-md</span>
-            <span class="chip" onclick="copy('rounded-lg')">rounded-lg</span>
-            <span class="chip" onclick="copy('rounded-xl')">rounded-xl</span>
-            <span class="chip" onclick="copy('rounded-2xl')">rounded-2xl</span>
-            <span class="chip" onclick="copy('rounded-full')">rounded-full</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Ring (focus)</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('ring-1')">ring-1</span>
-            <span class="chip" onclick="copy('ring-2')">ring-2</span>
-            <span class="chip" onclick="copy('ring-4')">ring-4</span>
-            <span class="chip" onclick="copy('ring-inset')">ring-inset</span>
-            <span class="chip" onclick="copy('ring-offset-2')">ring-offset-2</span>
-            <span class="chip" onclick="copy('ring-blue-500')">ring-blue-500</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- EFFECTS -->
-    <section class="section" id="effects">
-      <div class="section-header"><div class="section-dot"></div><h2>Effects & Shadows</h2></div>
-
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-label">Box shadow</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('shadow-sm')">shadow-sm</span>
-            <span class="chip" onclick="copy('shadow')">shadow</span>
-            <span class="chip" onclick="copy('shadow-md')">shadow-md</span>
-            <span class="chip" onclick="copy('shadow-lg')">shadow-lg</span>
-            <span class="chip" onclick="copy('shadow-xl')">shadow-xl</span>
-            <span class="chip" onclick="copy('shadow-2xl')">shadow-2xl</span>
-            <span class="chip" onclick="copy('shadow-none')">shadow-none</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Opacity</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('opacity-0')">opacity-0</span>
-            <span class="chip" onclick="copy('opacity-25')">opacity-25</span>
-            <span class="chip" onclick="copy('opacity-50')">opacity-50</span>
-            <span class="chip" onclick="copy('opacity-75')">opacity-75</span>
-            <span class="chip" onclick="copy('opacity-100')">opacity-100</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Blur / filter</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('blur-sm')">blur-sm</span>
-            <span class="chip" onclick="copy('blur')">blur</span>
-            <span class="chip" onclick="copy('blur-lg')">blur-lg</span>
-            <span class="chip" onclick="copy('blur-xl')">blur-xl</span>
-            <span class="chip" onclick="copy('backdrop-blur-sm')">backdrop-blur-sm</span>
-            <span class="chip" onclick="copy('backdrop-blur-md')">backdrop-blur-md</span>
-            <span class="chip" onclick="copy('grayscale')">grayscale</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Cursor / pointer</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('cursor-pointer')">cursor-pointer</span>
-            <span class="chip" onclick="copy('cursor-not-allowed')">cursor-not-allowed</span>
-            <span class="chip" onclick="copy('cursor-default')">cursor-default</span>
-            <span class="chip" onclick="copy('cursor-grab')">cursor-grab</span>
-            <span class="chip" onclick="copy('pointer-events-none')">pointer-events-none</span>
-            <span class="chip" onclick="copy('select-none')">select-none</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- TRANSFORMS -->
-    <section class="section" id="transforms">
-      <div class="section-header"><div class="section-dot"></div><h2>Transforms</h2></div>
-
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-label">Scale / rotate</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('scale-50')">scale-50</span>
-            <span class="chip" onclick="copy('scale-75')">scale-75</span>
-            <span class="chip" onclick="copy('scale-90')">scale-90</span>
-            <span class="chip" onclick="copy('scale-100')">scale-100</span>
-            <span class="chip" onclick="copy('scale-105')">scale-105</span>
-            <span class="chip" onclick="copy('scale-110')">scale-110</span>
-            <span class="chip" onclick="copy('rotate-45')">rotate-45</span>
-            <span class="chip" onclick="copy('rotate-90')">rotate-90</span>
-            <span class="chip" onclick="copy('rotate-180')">rotate-180</span>
-            <span class="chip" onclick="copy('-rotate-45')">-rotate-45</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Translate</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('translate-x-4')">translate-x-4</span>
-            <span class="chip" onclick="copy('-translate-x-1/2')">-translate-x-1/2</span>
-            <span class="chip" onclick="copy('translate-y-4')">translate-y-4</span>
-            <span class="chip" onclick="copy('-translate-y-1/2')">-translate-y-1/2</span>
-            <span class="chip" onclick="copy('translate-x-full')">translate-x-full</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- TRANSITIONS -->
-    <section class="section" id="transitions">
-      <div class="section-header"><div class="section-dot"></div><h2>Transitions & Animation</h2></div>
-
-      <div class="grid-2" style="margin-bottom:14px">
-        <div class="card">
-          <div class="card-label">Transition</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('transition')">transition</span>
-            <span class="chip" onclick="copy('transition-all')">transition-all</span>
-            <span class="chip" onclick="copy('transition-colors')">transition-colors</span>
-            <span class="chip" onclick="copy('transition-opacity')">transition-opacity</span>
-            <span class="chip" onclick="copy('transition-transform')">transition-transform</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Duration / easing</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('duration-75')">duration-75</span>
-            <span class="chip" onclick="copy('duration-150')">duration-150</span>
-            <span class="chip" onclick="copy('duration-300')">duration-300</span>
-            <span class="chip" onclick="copy('duration-500')">duration-500</span>
-            <span class="chip" onclick="copy('ease-in')">ease-in</span>
-            <span class="chip" onclick="copy('ease-out')">ease-out</span>
-            <span class="chip" onclick="copy('ease-in-out')">ease-in-out</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Animations</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('animate-spin')">animate-spin</span>
-            <span class="chip" onclick="copy('animate-ping')">animate-ping</span>
-            <span class="chip" onclick="copy('animate-pulse')">animate-pulse</span>
-            <span class="chip" onclick="copy('animate-bounce')">animate-bounce</span>
-            <span class="chip" onclick="copy('animate-none')">animate-none</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-label">Hover lift + color change</div>
-        <div class="code-block"><span class="tag">&lt;button</span> <span class="attr">class=</span><span class="val">"bg-blue-500 text-white px-6 py-3 rounded-xl
-         transition-all duration-200 ease-out
-         hover:bg-blue-600 hover:scale-105 hover:shadow-lg
-         active:scale-95"</span><span class="tag">&gt;</span>
-  Button
-<span class="tag">&lt;/button&gt;</span></div>
-      </div>
-    </section>
-
-    <div class="divider"></div>
-
-    <!-- STATES & VARIANTS -->
-    <section class="section" id="states">
-      <div class="section-header"><div class="section-dot"></div><h2>States & Variants</h2></div>
-      <p class="section-desc">Prefix any utility with a variant to scope it. Variants stack: <code class="cls">md:hover:bg-blue-600</code></p>
-
-      <div class="grid-2" style="margin-bottom:14px">
-        <div class="card">
-          <div class="card-label">Pseudo-class</div>
-          <div class="chips">
-            <span class="chip violet" onclick="copy('hover:')">hover:</span>
-            <span class="chip violet" onclick="copy('focus:')">focus:</span>
-            <span class="chip violet" onclick="copy('focus-within:')">focus-within:</span>
-            <span class="chip violet" onclick="copy('focus-visible:')">focus-visible:</span>
-            <span class="chip violet" onclick="copy('active:')">active:</span>
-            <span class="chip violet" onclick="copy('visited:')">visited:</span>
-            <span class="chip violet" onclick="copy('checked:')">checked:</span>
-            <span class="chip violet" onclick="copy('disabled:')">disabled:</span>
-            <span class="chip violet" onclick="copy('placeholder:')">placeholder:</span>
-            <span class="chip violet" onclick="copy('required:')">required:</span>
-            <span class="chip violet" onclick="copy('invalid:')">invalid:</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Pseudo-element</div>
-          <div class="chips">
-            <span class="chip orange" onclick="copy('before:')">before:</span>
-            <span class="chip orange" onclick="copy('after:')">after:</span>
-            <span class="chip orange" onclick="copy('first-line:')">first-line:</span>
-            <span class="chip orange" onclick="copy('first-letter:')">first-letter:</span>
-            <span class="chip orange" onclick="copy('selection:')">selection:</span>
-            <span class="chip orange" onclick="copy('placeholder:')">placeholder:</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Structural</div>
-          <div class="chips">
-            <span class="chip green" onclick="copy('first:')">first:</span>
-            <span class="chip green" onclick="copy('last:')">last:</span>
-            <span class="chip green" onclick="copy('odd:')">odd:</span>
-            <span class="chip green" onclick="copy('even:')">even:</span>
-            <span class="chip green" onclick="copy('only:')">only:</span>
-            <span class="chip green" onclick="copy('empty:')">empty:</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Group & Peer</div>
-          <div class="chips">
-            <span class="chip yellow" onclick="copy('group')">group</span>
-            <span class="chip yellow" onclick="copy('group-hover:')">group-hover:</span>
-            <span class="chip yellow" onclick="copy('group-focus:')">group-focus:</span>
-            <span class="chip yellow" onclick="copy('peer')">peer</span>
-            <span class="chip yellow" onclick="copy('peer-checked:')">peer-checked:</span>
-            <span class="chip yellow" onclick="copy('peer-focus:')">peer-focus:</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-label">group pattern — reveal child on parent hover</div>
-        <div class="code-block"><span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"group relative"</span><span class="tag">&gt;</span>
-  <span class="tag">&lt;img</span> <span class="attr">src=</span><span class="val">"photo.jpg"</span> <span class="attr">class=</span><span class="val">"w-full rounded-xl"</span> <span class="tag">/&gt;</span>
-  <span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"absolute inset-0 bg-black/50 opacity-0
-              group-hover:opacity-100 transition-opacity
-              flex items-center justify-center rounded-xl"</span><span class="tag">&gt;</span>
-    <span class="tag">&lt;span</span> <span class="attr">class=</span><span class="val">"text-white font-bold"</span><span class="tag">&gt;</span>View<span class="tag">&lt;/span&gt;</span>
-  <span class="tag">&lt;/div&gt;</span>
-<span class="tag">&lt;/div&gt;</span></div>
-      </div>
-    </section>
-
-    <!-- DARK MODE -->
-    <section class="section" id="darkmode">
-      <div class="section-header"><div class="section-dot"></div><h2>Dark Mode</h2></div>
-      <p class="section-desc">Enable with <code class="cls">darkMode: 'class'</code> in config, then toggle the <code class="cls">dark</code> class on <code>&lt;html&gt;</code>.</p>
-
-      <div class="grid-2" style="margin-bottom:14px">
-        <div class="card">
-          <div class="card-label">config</div>
-          <div class="code-block" style="margin:0">darkMode: <span class="str">'class'</span>,
-<span class="cmt">// or 'media' for system pref</span></div>
-        </div>
-        <div class="card">
-          <div class="card-label">toggle JS</div>
-          <div class="code-block" style="margin:0">document.documentElement
-  .classList.toggle(<span class="str">'dark'</span>)</div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-label">Dark mode classes in practice</div>
-        <div class="code-block"><span class="tag">&lt;body</span> <span class="attr">class=</span><span class="val">"bg-white dark:bg-gray-900
-         text-gray-900 dark:text-gray-100"</span><span class="tag">&gt;</span>
-
-<span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"bg-gray-100 dark:bg-gray-800
-         border border-gray-200 dark:border-gray-700
-         rounded-xl p-6"</span><span class="tag">&gt;</span>
-  <span class="tag">&lt;h2</span> <span class="attr">class=</span><span class="val">"text-gray-900 dark:text-white"</span><span class="tag">&gt;</span>Card<span class="tag">&lt;/h2&gt;</span>
-<span class="tag">&lt;/div&gt;</span></div>
-      </div>
-    </section>
-
-    <!-- ARBITRARY VALUES -->
-    <section class="section" id="arbitrary">
-      <div class="section-header"><div class="section-dot"></div><h2>Arbitrary Values</h2></div>
-      <p class="section-desc">Escape the scale with square brackets. Works on any utility property.</p>
-
-      <div class="grid-2" style="margin-bottom:14px">
-        <div class="card">
-          <div class="card-label">Sizing & spacing</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('w-[342px]')">w-[342px]</span>
-            <span class="chip" onclick="copy('h-[calc(100vh-80px)]')">h-[calc(100vh-80px)]</span>
-            <span class="chip" onclick="copy('p-[13px]')">p-[13px]</span>
-            <span class="chip" onclick="copy('mt-[72px]')">mt-[72px]</span>
-            <span class="chip" onclick="copy('top-[117px]')">top-[117px]</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Colors & gradients</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('bg-[#1da1f2]')">bg-[#1da1f2]</span>
-            <span class="chip" onclick="copy('text-[#ff6b6b]')">text-[#ff6b6b]</span>
-            <span class="chip" onclick="copy('border-[#e2e8f0]')">border-[#e2e8f0]</span>
-            <span class="chip" onclick="copy('from-[#667eea]')">from-[#667eea]</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Grid</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('[grid-template-columns:2fr_1fr]')">[grid-template-columns:2fr_1fr]</span>
-            <span class="chip" onclick="copy('col-span-[7]')">col-span-[7]</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Misc</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('text-[clamp(1rem,5vw,3rem)]')">text-[clamp(1rem,5vw,3rem)]</span>
-            <span class="chip" onclick="copy('rotate-[17deg]')">rotate-[17deg]</span>
-            <span class="chip" onclick="copy('delay-[200ms]')">delay-[200ms]</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-label">CSS properties not in Tailwind yet</div>
-        <div class="code-block"><span class="cmt">&lt;!-- arbitrary CSS property --&gt;</span>
-<span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"[mask-image:linear-gradient(to_bottom,black,transparent)]"</span><span class="tag">&gt;</span>
-<span class="tag">&lt;/div&gt;</span>
-
-<span class="cmt">&lt;!-- CSS variables --&gt;</span>
-<span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"bg-[var(--brand-color)]"</span><span class="tag">&gt;</span>
-<span class="tag">&lt;/div&gt;</span></div>
-      </div>
-    </section>
-
-    <!-- PRO TIPS -->
-    <section class="section" id="tips">
-      <div class="section-header"><div class="section-dot"></div><h2>Pro Tips</h2></div>
-
-      <div class="grid-2" style="gap:14px">
-        <div class="card">
-          <div class="card-label">@apply — reuse utilities in CSS</div>
-          <div class="code-block" style="margin:0"><span class="attr">.btn-primary</span> {
-  <span class="attr">@apply</span> bg-blue-600 text-white
-         px-5 py-2.5 rounded-lg
-         font-semibold transition-colors
-         hover:bg-blue-700;
-}</div>
-        </div>
-        <div class="card">
-          <div class="card-label">theme() in CSS</div>
-          <div class="code-block" style="margin:0"><span class="attr">.hero</span> {
-  background: theme(<span class="str">'colors.blue.600'</span>);
-  padding: theme(<span class="str">'spacing.8'</span>);
-  font-size: theme(<span class="str">'fontSize.xl'</span>);
-}</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Extend the theme</div>
-          <div class="code-block" style="margin:0">theme: {
-  extend: {
-    colors: {
-      brand: <span class="str">'#6366f1'</span>,
-    },
-    screens: {
-      xs: <span class="str">'480px'</span>,
-    },
-    fontFamily: {
-      display: [<span class="str">'Sora'</span>, <span class="str">'sans-serif'</span>],
-    },
-  }
-}</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Safelist dynamic classes</div>
-          <div class="code-block" style="margin:0"><span class="cmt">// tailwind.config.js</span>
-safelist: [
-  <span class="str">'bg-red-500'</span>,
-  <span class="str">'bg-green-500'</span>,
-  {
-    pattern: <span class="str">/bg-(red|green|blue)-(400|500)/</span>,
-  }
-]</div>
-        </div>
-        <div class="card">
-          <div class="card-label">Negative values</div>
-          <div class="chips">
-            <span class="chip" onclick="copy('-mt-4')">-mt-4</span>
-            <span class="chip" onclick="copy('-mx-6')">-mx-6</span>
-            <span class="chip" onclick="copy('-top-2')">-top-2</span>
-            <span class="chip" onclick="copy('-rotate-12')">-rotate-12</span>
-            <span class="chip" onclick="copy('-translate-x-1/2')">-translate-x-1/2</span>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-label">Important modifier</div>
-          <div class="code-block" style="margin:0"><span class="cmt">&lt;!-- prefix with ! for !important --&gt;</span>
-<span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"!text-red-500 !font-bold"</span><span class="tag">&gt;</span>
-<span class="tag">&lt;/div&gt;</span></div>
-        </div>
-      </div>
-
-      <div class="card" style="margin-top:14px">
-        <div class="card-label">Full component example — responsive card with dark mode</div>
-        <div class="code-block"><span class="tag">&lt;article</span> <span class="attr">class=</span><span class="val">"
-  group
-  bg-white dark:bg-gray-900
-  border border-gray-200 dark:border-gray-700
-  rounded-2xl overflow-hidden
-  shadow-sm hover:shadow-xl
-  transition-all duration-300 hover:-translate-y-1
-  flex flex-col
-"</span><span class="tag">&gt;</span>
-  <span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"relative overflow-hidden aspect-video"</span><span class="tag">&gt;</span>
-    <span class="tag">&lt;img</span> <span class="attr">class=</span><span class="val">"w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"</span> <span class="tag">/&gt;</span>
-  <span class="tag">&lt;/div&gt;</span>
-  <span class="tag">&lt;div</span> <span class="attr">class=</span><span class="val">"p-6 flex flex-col gap-3 flex-1"</span><span class="tag">&gt;</span>
-    <span class="tag">&lt;span</span> <span class="attr">class=</span><span class="val">"text-xs font-semibold uppercase tracking-wider text-blue-500"</span><span class="tag">&gt;</span>Tag<span class="tag">&lt;/span&gt;</span>
-    <span class="tag">&lt;h3</span> <span class="attr">class=</span><span class="val">"text-xl font-bold text-gray-900 dark:text-white leading-snug"</span><span class="tag">&gt;</span>Title<span class="tag">&lt;/h3&gt;</span>
-    <span class="tag">&lt;p</span> <span class="attr">class=</span><span class="val">"text-gray-500 dark:text-gray-400 text-sm line-clamp-3"</span><span class="tag">&gt;</span>Body<span class="tag">&lt;/p&gt;</span>
-    <span class="tag">&lt;a</span> <span class="attr">class=</span><span class="val">"mt-auto self-start text-blue-600 dark:text-blue-400 font-semibold text-sm hover:underline"</span><span class="tag">&gt;</span>Read more →<span class="tag">&lt;/a&gt;</span>
-  <span class="tag">&lt;/div&gt;</span>
-<span class="tag">&lt;/article&gt;</span></div>
-      </div>
-    </section>
-
-  </main>
-</div>
-
-<script>
-  function copy(text) {
-    navigator.clipboard.writeText(text).then(() => {
-      const t = document.getElementById('toast');
-      t.textContent = `Copied: ${text}`;
-      t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 1600);
-    });
-  }
-
-  function filterClasses(q) {
-    q = q.toLowerCase().trim();
-    const chips = document.querySelectorAll('.chip');
-    chips.forEach(c => {
-      c.style.display = (!q || c.textContent.toLowerCase().includes(q)) ? '' : 'none';
-    });
-  }
-
-  // Active sidebar link on scroll
-  const sections = document.querySelectorAll('.section');
-  const links = document.querySelectorAll('.sidebar nav a');
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        links.forEach(l => l.classList.remove('active'));
-        const active = document.querySelector(`.sidebar nav a[href="#${e.target.id}"]`);
-        if (active) active.classList.add('active');
-      }
-    });
-  }, { threshold: 0.3 });
-  sections.forEach(s => obs.observe(s));
-</script>
-
+        // Initialize
+        updateActiveNav();
+    </script>
 </body>
+
 </html>
